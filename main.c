@@ -7,5 +7,8 @@
 
 main() 
 {
-    printf("hello world");
+    char input;
+
+    printf("Waiting for command... \nRun \"cmds\" for a list of commands.\n");
+    scanf("%c", &input);
 }
