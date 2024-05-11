@@ -8,13 +8,20 @@
 #include <ctype.h>
 #include <string.h>
 
+/* struct student // wow student details (figure out how to implement)
+{
+    char studentName[16];
+    int id[8];
+    float gpa;
+}; */
+
 void main(void) 
 {
     char *students[] = { "owien", "hitler", "owein", NULL };
     int noStudents = 3; // figure out how to automatically increment later.
     char input[128] = "void";
 
-    printf("WELCOME TO THE STUDENT RECORD SYSTEM. v0.1");
+    printf("WELCOME TO THE STUDENT RECORD SYSTEM v0.1");
 
     while (strcmp(input, "quit") != 0) {
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
