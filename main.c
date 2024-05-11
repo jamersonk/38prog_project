@@ -4,26 +4,31 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 
-int main() 
+void main(void) 
 {
-    char input[50];
-    int cmdsPage = 1;
+    char *students[] = { "owien, hitler, owein" };
+    char input[128] = "void";
 
-    printf("Waiting for command... \nRun \"cmds\" for a list of commands.\n");
-    scanf("%s", input);    
+    while (strcmp(input, "quit") != 0) {
+        printf("\nPlease enter a command. \"cmds\" for a list of commands. \"quit\" to exit the program.\n> ");
+        scanf("%s", input);
 
-    if (strcmp(input, "cmds") == 0) { // strcmp compares each character in the input string (an array), to those in the string (array) "char".
-        printf("=============================\n");
-        printf("LIST OF COMMANDS [Pg %d/1]\n", cmdsPage);
-        printf("=============================\n");
-        printf("./main - Initialises the main.c program.\n");
-        printf("cmds - Provides a list of commands.\n");
-        printf("list - Prints a list of students. Usage: list <page>\n");
-        printf("=============================\n");
-        printf("Run cmds <page> to view other pages.\n");
-        printf("=============================\n");
-    }
-    else printf("%s", input);
-}
+        if (strcmp(input, "quit") == 0)
+        {
+            printf("Quitting!\n");
+            return 0;
+        }
+        else if (strcmp(input, "cmds") == 0)
+        {
+            printf("Placeholder\n");
+        }
+        else
+        {
+            printf("ERROR: INVALID COMMAND.\n");
+        }
+    }    
+} 
