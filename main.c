@@ -8,16 +8,24 @@
 #include <ctype.h>
 #include <string.h>
 
-/* struct student // wow student details (figure out how to implement)
+// struct for student array.
+struct Student
 {
-    char studentName[16];
-    int id[8];
+    char name[16];
+    int id;
     float gpa;
-}; */
+};
 
-void main(void) 
+int main() 
 {
-    char *students[] = { "owien", "hitler", "owein", NULL };
+    // student array.
+    struct Student students[5] = { 
+        {.name = "owien", .id = 1},
+        {.name = "bob", .id = 2},
+        {.name = "owein", .id = 3},
+        NULL
+    };
+
     int noStudents = 3; // figure out how to automatically increment later.
     char input[128] = "void";
 
@@ -41,10 +49,10 @@ void main(void)
         else if (strcmp(input, "list") == 0)
         {
             int i = 0;
-            int count = 1;
+            printf("ID: NAME\n");
             while (i != noStudents) {
-                printf("%d %s \n", count, students[i]);
-                i += 1; count += 1;
+                printf("%d: %s \n", students[i].id, students[i].name);
+                i += 1;
             }
         }
         else
