@@ -11,7 +11,9 @@
 // struct for student array.
 struct Student
 {
-    char name[32];
+    char name[64];
+    int hasLastName;
+    char lastName [32];
     int id;
     float gpa;
 };
@@ -20,9 +22,9 @@ int main()
 {
     // student array.
     struct Student students[128] = { 
-        {.name = "owien", .id = 1},
-        {.name = "bob", .id = 2},
-        {.name = "owein", .id = 3},
+        {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 1, .gpa = 3.9},
+        {.name = "Bob", .hasLastName = 0, .id = 2, .gpa = 2.0},
+        {.name = "Owein", .hasLastName = 0, .id = 3, .gpa = 2.94},
         NULL
     };
 
@@ -37,7 +39,7 @@ int main()
 
         if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0)
         {
-            printf("Quitting!\n");
+            printf("Quitting!\n\n");
             return 0;
         }
         else if (strcmp(input, "cmds") == 0)
@@ -51,13 +53,18 @@ int main()
             int i = 0;
             printf("ID: NAME\n");
             while (i != noStudents) {
-                printf("%d: %s \n", students[i].id, students[i].name);
+                if (students[i].hasLastName == 1) {
+                printf("%d: %s, %s | cGPA: %.2f \n", students[i].id, students[i].lastName, students[i].name, students[i].gpa);
+                } else {
+                    printf("%d: %s | cGPA: %.2f \n", students[i].id, students[i].name, students[i].gpa);
+                }
                 i += 1;
             }
         }
         else
         {
-            printf("ERROR: INVALID COMMAND.\n");
+            printf("Invalid Command.\n");
+            return 1;
         }
     }    
 } 
