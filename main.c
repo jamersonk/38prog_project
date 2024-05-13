@@ -11,7 +11,7 @@
 // struct for student array.
 struct Student
 {
-    char name[16];
+    char name[32];
     int id;
     float gpa;
 };
@@ -19,7 +19,7 @@ struct Student
 int main() 
 {
     // student array.
-    struct Student students[5] = { 
+    struct Student students[128] = { 
         {.name = "owien", .id = 1},
         {.name = "bob", .id = 2},
         {.name = "owein", .id = 3},
