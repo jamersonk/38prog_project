@@ -54,18 +54,19 @@ int main()
             while (i != noStudents) {
                 if (students[i].hasLastName == 1) {
                     printf("%d: %s, %s | cGPA: %.2f \n", students[i].id, students[i].lastName, students[i].name, students[i].gpa);
-                } else {
+                } 
+                else {
                     printf("%d: %s | cGPA: %.2f \n", students[i].id, students[i].name, students[i].gpa);
                 }
                 i += 1;
             }
         }
         else if (strcmp(input, "add") == 0) {
-            char selectAdd;
-            printf("Select STUDENT [S] or MODULE [M]. ");
-            scanf("%c", &selectAdd);
+            char selectAdd[2];
+            printf("Select STUDENT [S] or MODULE [M]: ");
+            scanf("%s", selectAdd);
 
-            if (selectAdd == 'S') {
+            if (strcmp(selectAdd, "S") == 0) {
                 /*
                 prompt user for student first name
                 ask user if theres a last name
@@ -83,15 +84,17 @@ int main()
                 }
                 apend inputs to students() 
                 */
+               printf("selected student\n"); //del
             } 
-            else if (selectAdd == 'M') {
+            else if (strcmp(selectAdd, "M") == 0) {
                 /*
                 prompt user for module name
                 prompt user for module credit unit
                 */
+               printf("selected module\n"); //del
             }
             else {
-                printf("Invalid input. \n");
+                printf("Invalid input. Please try again.\n");
             }
 
         } 
