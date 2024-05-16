@@ -9,23 +9,30 @@ v1.1-alpha
 #include <ctype.h>
 #include <string.h>
 
+// struct for modules array
+struct Module {
+    char name[64];
+    int credits;
+    int gpa;
+}
+
 // struct for student array.
-struct Student
-{
+struct Student {
     char name[64];
     int hasLastName;
     char lastName [32];
     int id;
     float gpa;
+    struct Module modules[128];
 };
 
 int main() 
 {
     // students array.
     struct Student students[128] = { 
-        {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 1, .gpa = 3.9},
-        {.name = "Bob", .hasLastName = 0, .id = 2, .gpa = 2.0},
-        {.name = "Owein", .hasLastName = 0, .id = 3, .gpa = 2.94},
+        {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 000001, .gpa = 3.9},
+        {.name = "Bob", .hasLastName = 0, .id = 000002, .gpa = 2.0},
+        {.name = "Owein", .hasLastName = 0, .id = 000003, .gpa = 2.94},
         NULL
     };
 
@@ -38,19 +45,16 @@ int main()
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
         scanf("%s", input);
 
-        if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0)
-        {
+        if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) {
             printf("Quitting!\n\n");
             return 0;
         }
-        else if (strcmp(input, "cmds") == 0)
-        {
+        else if (strcmp(input, "cmds") == 0) {
             printf("quit - exits the program. (sudos: close, exit)\n");
             printf("cmds - lists all available commands.\n");
             printf("list - lists all students in the record.\n");
         }
-        else if (strcmp(input, "list") == 0)
-        {
+        else if (strcmp(input, "list") == 0) {
             int i = 0;
             printf("ID: NAME\n");
             while (i != noStudents) {
@@ -62,12 +66,44 @@ int main()
                 i += 1;
             }
         }
-        else
-        {
+        else if (strcmp(input, "add") == 0) {
+            char selectAdd;
+            printf("Select STUDENT [S] or MODULE [M]. ");
+            scanf("%c", &selectAdd);
+
+            if (selectAdd == S) {
+                /*
+                prompt user for student first name
+                ask user if theres a last name
+                if (has last name) {
+                    prompt user for student last name
+                }
+                while (user not exit) {
+                    prompt user for module name
+                    check if module exists in system
+                    if (not exist) {
+                        error out
+                    }
+                    prompt user for gpa
+                    ask user if they want to add another module
+                }
+                apend inputs to students() 
+                */
+            } 
+            else if (selectAdd == M) {
+                /*
+                prompt user for module name
+                prompt user for module credit unit
+                */
+            }
+            else {
+                printf("Invalid input. \n")
+            }
+
+        } 
+        else {
             printf("Invalid Command.\n");
             return 1;
         }
     }    
 } 
-
-// functions go here later
