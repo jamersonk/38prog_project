@@ -1,7 +1,7 @@
 /*
 (C) 2024 JAMES KUANG ZHONGCHUAN
 38PROG Programming: Student Record System
-v1.1-alpha
+v1.1-alpha 
 */
 
 #include <stdio.h>
@@ -10,11 +10,6 @@ v1.1-alpha
 #include <string.h>
 
 // struct for modules array
-struct Module {
-    char name[64];
-    int credits;
-    int gpa;
-}
 
 // struct for student array.
 struct Student {
@@ -23,7 +18,6 @@ struct Student {
     char lastName [32];
     int id;
     float gpa;
-    struct Module modules[128];
 };
 
 int main() 
@@ -39,7 +33,7 @@ int main()
     int noStudents = 3; // figure out how to automatically increment later.
     char input[128] = "void";
 
-    printf("WELCOME TO THE STUDENT RECORD SYSTEM v0.1");
+    printf("WELCOME TO THE STUDENT RECORD SYSTEM v1.1-alpha!");
 
     while (strcmp(input, "quit") != 0) {
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
@@ -71,7 +65,7 @@ int main()
             printf("Select STUDENT [S] or MODULE [M]. ");
             scanf("%c", &selectAdd);
 
-            if (selectAdd == S) {
+            if (selectAdd == 'S') {
                 /*
                 prompt user for student first name
                 ask user if theres a last name
@@ -90,14 +84,14 @@ int main()
                 apend inputs to students() 
                 */
             } 
-            else if (selectAdd == M) {
+            else if (selectAdd == 'M') {
                 /*
                 prompt user for module name
                 prompt user for module credit unit
                 */
             }
             else {
-                printf("Invalid input. \n")
+                printf("Invalid input. \n");
             }
 
         } 
