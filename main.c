@@ -1,6 +1,7 @@
 /*
 (C) 2024 JAMES KUANG ZHONGCHUAN
 38PROG Programming: Student Record System
+v1.1-alpha
 */
 
 #include <stdio.h>
@@ -20,7 +21,7 @@ struct Student
 
 int main() 
 {
-    // student array.
+    // students array.
     struct Student students[128] = { 
         {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 1, .gpa = 3.9},
         {.name = "Bob", .hasLastName = 0, .id = 2, .gpa = 2.0},
@@ -54,7 +55,7 @@ int main()
             printf("ID: NAME\n");
             while (i != noStudents) {
                 if (students[i].hasLastName == 1) {
-                printf("%d: %s, %s | cGPA: %.2f \n", students[i].id, students[i].lastName, students[i].name, students[i].gpa);
+                    printf("%d: %s, %s | cGPA: %.2f \n", students[i].id, students[i].lastName, students[i].name, students[i].gpa);
                 } else {
                     printf("%d: %s | cGPA: %.2f \n", students[i].id, students[i].name, students[i].gpa);
                 }
@@ -68,3 +69,5 @@ int main()
         }
     }    
 } 
+
+// functions go here later
