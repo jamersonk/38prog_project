@@ -1,3 +1,4 @@
-(c) 2024 James Kuang Zhongchuan
+# Student Record System
+© 2024 James Kuang Zhongchuan
 
-Submission for 38PROG Programming Project.
+This GitHub page holds the project I created for the 38PROG Programming module at NP.
