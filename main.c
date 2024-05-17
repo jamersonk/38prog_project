@@ -24,23 +24,27 @@ struct Student {
     float gpa;
 };
 
-// declarations
+// prototypes
 void cmds(int pg);
 int getPage();
 void cmdsList();
 void cmdsAdd();
 int moduleExists(char name[]);
 
-// global
-struct Student students[128] = { 
-        {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 000001, .gpa = 3.9},
-        {.name = "Bob", .hasLastName = 0, .id = 000002, .gpa = 2.0},
-        {.name = "Owein", .hasLastName = 0, .id = 000003, .gpa = 2.94}
+// global variables
+struct Module modules[128] = {
+    {.name = "APPLIED MATHEMATICS 1", .credits = 4}
 };
-int noStudents = 3; // figure out how to automatically increment later.
 
+struct Student students[128] = { 
+    {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 000001, .gpa = 3.9},
+    {.name = "Bob", .hasLastName = 0, .id = 000002, .gpa = 2.0},
+    {.name = "Owein", .hasLastName = 0, .id = 000003, .gpa = 2.94}
+};
 
-int main() 
+int noStudents = 3;
+
+int main() // BEGIN MAIN
 {
     // students array.
     char input[128] = "void";
@@ -71,8 +75,9 @@ int main()
             printf("Invalid Command.\n");
         }
     }    
-} 
+} // END MAIN
 
+// functions
 void cmds(int pg)
 {
     if (pg >= 2) {
@@ -167,26 +172,10 @@ void cmdsAdd()
                 printf("Module could not be found. Please try again.\n");
             }
         }
-        
-        /*
-        while (user not exit) {
-            prompt user for module name
-            check if module exists in system
-            if (not exist) {
-                error out
-            }
-            prompt user for gpa
-            ask user if they want to add another module
-        }
-        */
     } 
     else if (strcmp(selectAdd, "M") == 0) {
         char moduleName;
         int credits;
-        /*
-        prompt user for module name
-        prompt user for module credit unit
-        */
         printf("Enter module NAME: ");
         scanf(" %[^\n]s", moduleName);
         printf("Enter no. of CREDITS: ");
@@ -197,4 +186,3 @@ void cmdsAdd()
         printf("Invalid input. Please try again.\n");
     }
 }
-
