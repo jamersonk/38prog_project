@@ -13,7 +13,7 @@ v1.1-alpha
 struct Module {
     char name[64];
     int credits;
-}
+};
 
 // struct for student array.
 struct Student {
@@ -27,7 +27,7 @@ struct Student {
 // declarations
 void cmds(int pg);
 int getPage();
-void cmdsList(int pg);
+void cmdsList();
 void cmdsAdd();
 int moduleExists(char name[]);
 
@@ -58,31 +58,37 @@ int main()
             return 0;
         }
         else if (strcmp(input, "cmds") == 0) {
-            printf("=================\n");
-            printf("COMMAND LIST\n");
-            printf("=================\n");
-            printf("quit - exits the program. (sudos: close, exit)\n");
-            printf("cmds - lists all available commands.\n");
-            printf("list - lists all students.\n");
-            printf("add - add a new student/module.\n");
-            printf("=================\n");
+            page = getPage();
+            cmds(page);
         }
         else if (strcmp(input, "list") == 0) {
-            page = getPage();
-            cmdsList(page);
+            cmdsList();
         }
         else if (strcmp(input, "add") == 0) {
-            cmdsAdd(page);
+            cmdsAdd();
         } 
         else {
             printf("Invalid Command.\n");
-            return 1;
         }
     }    
 } 
 
 void cmds(int pg)
 {
+    if (pg >= 2) {
+        printf("Maximum page is 1!");
+        return 1;
+    }
+    printf("=================\n");
+    printf("COMMAND LIST\n");
+    printf("=================\n");
+    if (pg == 1) {
+        printf("quit - exits the program. (sudos: close, exit)\n");
+        printf("cmds - lists all available commands.\n");
+        printf("list - lists all students.\n");
+        printf("add - add a new student/module.\n");
+    }
+    printf("=================\n");
 
 }
 
@@ -94,7 +100,7 @@ int getPage()
     return page;
 }
 
-void cmdsList(int pg)
+void cmdsList()
 {
     int i = 0;
     printf("ID: NAME\n");
@@ -111,8 +117,12 @@ void cmdsList(int pg)
 
 int moduleExists(char name[])
 {
+    int moduleExist = 1;
+    if (name) {
+        moduleExist = 1;
+    }
     printf("module exists placeholder\n");
-    return 1;
+    return moduleExist;
 }
 
 void cmdsAdd()
