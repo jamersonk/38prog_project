@@ -143,7 +143,7 @@ void cmdsAdd()
         scanf("  %c", &lastNameState);
         if (lastNameState == 'y' || lastNameState == 'Y') {
             printf("Enter the LAST NAME: ");
-            scanf("  %s", lastName);
+            scanf(" %[^\n]s", firstName);        
         }
         else if (lastNameState != 'n' || lastNameState == 'N') {
             printf("Your input is invalid. Please try again.");
@@ -152,7 +152,7 @@ void cmdsAdd()
         printf("You will now be prompted to enter MODULE INFORMATION.\n");
         while (exitState != 1) {
             printf("Enter Module NAME: ");
-            scanf("  %s", moduleName);                
+        scanf(" %[^\n]s", moduleName);             
             if (moduleExists(moduleName) == 1) {  
                 char exitRequest;  
                 printf("Enter the student's GPA: ");
@@ -160,7 +160,7 @@ void cmdsAdd()
                 printf("You have added %s with GPA %.2f. \n", moduleName, GPA);
                 printf("Do you have any other modules to add? [Y/N] ");
                 scanf(" %c", &exitRequest);
-                if (exitRequest = 'N') {
+                if (exitRequest == 'N' || exitRequest == 'n') {
                     exitState = 1;
                 }
             } else {
@@ -181,11 +181,17 @@ void cmdsAdd()
         */
     } 
     else if (strcmp(selectAdd, "M") == 0) {
+        char moduleName;
+        int credits;
         /*
         prompt user for module name
         prompt user for module credit unit
         */
-        printf("selected module\n"); //del
+        printf("Enter module NAME: ");
+        scanf(" %[^\n]s", moduleName);
+        printf("Enter no. of CREDITS: ");
+        scanf("%d", credits);
+        printf("Created %s, with %d credits.", moduleName, credits);
     }
     else {
         printf("Invalid input. Please try again.\n");
