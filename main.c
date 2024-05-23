@@ -8,27 +8,8 @@
 #include <ctype.h>
 #include <string.h>
 
-// struct for student array.
-struct Student
-{
-    char name[64];
-    int hasLastName;
-    char lastName [32];
-    int id;
-    float gpa;
-};
-
 int main() 
 {
-    // student array.
-    struct Student students[128] = { 
-        {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 1, .gpa = 3.9},
-        {.name = "Bob", .hasLastName = 0, .id = 2, .gpa = 2.0},
-        {.name = "Owein", .hasLastName = 0, .id = 3, .gpa = 2.94},
-        NULL
-    };
-
-    int noStudents = 3; // figure out how to automatically increment later.
     char input[128] = "void";
 
     printf("WELCOME TO THE STUDENT RECORD SYSTEM v0.1");
