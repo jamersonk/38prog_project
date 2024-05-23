@@ -26,7 +26,7 @@ int main()
     {
         int page = 0;
         printf("Please enter the desired page: ");
-        scanf("%d", page);
+        scanf("%d", &page);
         if (page > 1) {
             printf("Page exceeds maximum.");
             return 1;
