@@ -1,9 +1,14 @@
 /*
-(C) 2024 JAMES KUANG ZHONGCHUAN
+COPYRIGHT (C) 2024 JAMES KUANG ZHONGCHUAN
+
+THIS WORK IS LICENSED UNDER THE GNU GENERAL PUBLIC LICENSE v3.0.
+View the full license text here: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
+
 38PROG Programming: Student Record System
-v1.1-alpha 
+v1.0 INDEV 
 */
 
+// libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -29,28 +34,34 @@ void cmds(int pg);
 int getPage();
 void cmdsList();
 void cmdsAdd();
-int moduleExists(char name[]);
+int moduleExists(char givenName[]);
 
 // global variables
-struct Module modules[128] = {
-    {.name = "APPLIED MATHEMATICS 1", .credits = 4}
+// modules array
+struct Module modules[48] = {
+    {.name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890"},
+    {.name = "Module 1", .credits = 4},
+    {.name = "Module 2", .credits = 1}
 };
 
+// students array
 struct Student students[128] = { 
     {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 000001, .gpa = 3.9},
     {.name = "Bob", .hasLastName = 0, .id = 000002, .gpa = 2.0},
-    {.name = "Owein", .hasLastName = 0, .id = 000003, .gpa = 2.94}
+    {.name = "Owien", .hasLastName = 0, .id = 000003, .gpa = 2.94}
 };
 
 int noStudents = 3;
+int noModules = 1;
 
-int main() // BEGIN MAIN
+// BEGIN MAIN
+int main()
 {
     // students array.
     char input[128] = "void";
     int page;
 
-    printf("WELCOME TO THE STUDENT RECORD SYSTEM v1.1-alpha!");
+    printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
     while (strcmp(input, "quit") != 0) {
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
@@ -59,6 +70,7 @@ int main() // BEGIN MAIN
         if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) {
             printf("Quitting!\n");
             printf("=================\n");
+            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.")
             return 0;
         }
         else if (strcmp(input, "cmds") == 0) {
@@ -120,13 +132,19 @@ void cmdsList()
     }
 }
 
-int moduleExists(char name[])
+int moduleExists(char givenName[])
 {
-    int moduleExist = 1;
-    if (name) {
-        moduleExist = 1;
+    int i = 0;
+    int moduleExist = 0;
+    while (i != noModules) {
+        char* moduleName = modules[i].name;
+        if (moduleName == givenName) {
+            moduleExist = 1;
+            printf("System: moduleExists returned TRUE");
+            return moduleExist;
+        }
     }
-    printf("module exists placeholder\n");
+    printf("System: moduleExists returned FALSE")
     return moduleExist;
 }
 
@@ -143,12 +161,12 @@ void cmdsAdd()
         int exitState = 0;
 
         printf("Enter the FIRST NAME: ");
-        scanf(" %[^\n]s", firstName);
+        scanf(" %[^\n]s", firstName); // %[^\n]d allows for the acceptance of multi word inputs.
         printf("Does this student have a LAST NAME? [Y/N] ");
         scanf("  %c", &lastNameState);
         if (lastNameState == 'y' || lastNameState == 'Y') {
             printf("Enter the LAST NAME: ");
-            scanf(" %[^\n]s", firstName);        
+            scanf(" %[^\n]s", lastName);        
         }
         else if (lastNameState != 'n' || lastNameState == 'N') {
             printf("Your input is invalid. Please try again.");
@@ -172,6 +190,7 @@ void cmdsAdd()
                 printf("Module could not be found. Please try again.\n");
             }
         }
+        // append to STUDENTS array.
     } 
     else if (strcmp(selectAdd, "M") == 0) {
         char moduleName;
@@ -180,7 +199,12 @@ void cmdsAdd()
         scanf(" %[^\n]s", moduleName);
         printf("Enter no. of CREDITS: ");
         scanf("%d", credits);
-        printf("Created %s, with %d credits.", moduleName, credits);
+        if (moduleExists == 1) {
+            printf("ERROR: A module with that name already exists.");
+        } else {
+            // append to MODULES array
+            printf("Created %s, with %d credits.", moduleName, credits);
+        }
     }
     else {
         printf("Invalid input. Please try again.\n");
