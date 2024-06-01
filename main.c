@@ -113,6 +113,9 @@ void cmds(int pg)
         printf("cmds - lists all available commands.\n");
         printf("list - lists all students.\n");
         printf("add - add a new student/module.\n");
+        printf("del - delete a student.");
+        printf("edit - edit a student.");
+        printf("view - view a student in detail.");
     }
     printf("=================\n");
 }
