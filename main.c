@@ -26,7 +26,7 @@ typedef struct {
     char lastName [32];
     int id, credits;
     float gpa;
-} Student; // potential to include modules record.
+} Student; // potential to include modules
 
 // prototypes
 void cmds(int pg);
@@ -37,8 +37,9 @@ void cmdsAdd();
 int moduleExists(char givenName[]);
 void addStudent(Student *, int);
 void addModule(Module *, int);
-void cmdsDel(Student *, int);
-void cmdsEdit(Student*, int);
+void cmdsDel(Student *);
+void cmdsEdit(Student*);
+void cmdsView(Student *students);
 
 // global variables
 // modules array
@@ -86,10 +87,10 @@ int main()
             cmdsAdd();
         } 
         else if (strcmp(input, "del") == 0) {
-            cmdsDel(students, studentsAllocated);
+            cmdsDel(students);
         }
         else if (strcmp(input, "edit")) {
-
+            cmdsView(students);
         }
         else {
             printf("Invalid Command.\n");
@@ -250,7 +251,7 @@ void addModule(Module *modules, int num)
     }
 }
 
-void cmdsDel(Student *students, int num)
+void cmdsDel(Student *students)
 {
     int id = 0, pos = 0, i = 0, j = 0;
     char state;
@@ -279,7 +280,7 @@ void cmdsDel(Student *students, int num)
     }
 }
 
-void cmdsEdit(Student *students, int num)
+void cmdsEdit(Student *students)
 {
     int id = 0, pos = 0, i = 0;
     char input[16];
@@ -350,12 +351,12 @@ void editLastName(Student *students, int pos)
     }
 }
 
-void editGPA(Student *students, int pos) 
+void editGPA() 
 {
     linkModule(); // potentil for inclusion of delinking modules
 }
 
-void linkModule() 
+void linkModule(Student *students, int pos) 
 {
     char name[64];
     float GPA = 0.00, wGPA = 0.00, tGPA = 0.00;
@@ -364,7 +365,7 @@ void linkModule()
     printf("Enter the module NAME: ");
     scanf(" %s", name);
     printf("Enter the student's GPA: ");
-    scanf(" %d", GPA);
+    scanf(" %d", &GPA);
 
     if (moduleExists(name) < 0) {
         printf("Module does not exist.\n");
@@ -373,7 +374,7 @@ void linkModule()
         credits = modules[moduleExists(name)].credits;  
         tCredits = students[pos].credits + credits;
         wGPA = gpaCalculator(GPA, modules[moduleExists(name)].credits);
-        tGPA = ((students[pos].gpa * students[pos].credits) + (GPA * credits));
+        tGPA = ((students[pos].gpa * students[pos].credits) + (wGPA * credits));
         students[pos].gpa = tGPA / tCredits;
     }
 }
@@ -384,3 +385,21 @@ void delinkModule()
     // NOT IN USE
 }
 */
+
+void cmdsView(Student *students) 
+{
+    int id, pos;
+
+    printf("Enter desired student's ID: ");
+    scanf(" %d", &id);
+    pos = id - 1;
+
+    if (students[id].hasLastName == 0) {
+        printf("%s\n", students[pos].name);
+    } 
+    else {
+        printf("%s, %s\n", students[pos].lastName, students[pos].name);
+    }
+    printf("GPA: %.2f", students[pos].gpa);
+    printf("Credits: %d", students[pos].credits);
+}
