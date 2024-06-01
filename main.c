@@ -299,9 +299,9 @@ void cmdsEdit(Student *students)
     if (students[pos].hasLastName == 1) {
         printf("Last Name: %s\n", students[pos].lastName);
     }
-    printf("GPA: %d\n", students[pos].gpa);
+    printf("GPA: %.2f\n", students[pos].gpa);
 
-    while (strcmp(input, "n") != 0 || strcmp(input, "N" != 0)) {
+    while (strcmp(input, "n") != 0) {
         printf("What do you want to change? \nEnter \"name\" to edit First Name.\nEnter \"last\" to edit Last Name.\nEnter \"gpa\" to edit modules & grades.\n");
         printf("To exit, enter \"n\"\n");
         printf("> ");
@@ -315,9 +315,6 @@ void cmdsEdit(Student *students)
         else if (strcmp(input,"gpa") == 0) {
             editGPA(students, pos);
         }
-        else {
-        printf("Invalid input.\n");
-        }
     }
     
 }
@@ -327,7 +324,8 @@ void editFirstName(Student *students, int pos)
     char newInput[64], confirm;
     printf("You are changing the FIRST NAME: %s", students[pos].name);
     scanf(" %s", newInput);
-    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.", students[pos].name, newInput);
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.\n", students[pos].name, newInput);
+    printf("> ");
     scanf(" %c", &confirm);
     
     if (confirm == 'y') {
@@ -345,7 +343,8 @@ void editLastName(Student *students, int pos)
     char newInput[64], confirm;
     printf("You are changing the LAST NAME: %s", students[pos].lastName);
     scanf(" %s", newInput);
-    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.", students[pos].lastName, newInput);
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.\n", students[pos].lastName, newInput);
+    printf("> ");
     scanf(" %c", &confirm);
     
     if (confirm == 'y') {
@@ -370,19 +369,19 @@ void linkModule(Student *students, int pos)
     int credits = 0, tCredits;
     printf("You are editing the modules associated with %s.\n", students[pos].name);
     printf("Enter the module NAME: ");
-    scanf("  %s", name);
+    scanf("  %[^\n]s", name);
     printf("Enter the student's GPA: ");
-    scanf("  %d", &GPA);
+    scanf("  %f", &GPA);
 
-    if (moduleExists(name) < 0) {
-        printf("Module does not exist.\n");
-        return 1;
-    } else {
+    if (moduleExists(name) >=  0) {
         credits = modules[moduleExists(name)].credits;  
         tCredits = students[pos].credits + credits;
         wGPA = gpaCalculator(GPA, modules[moduleExists(name)].credits);
         tGPA = ((students[pos].gpa * students[pos].credits) + (wGPA * credits));
         students[pos].gpa = tGPA / tCredits;
+    } else {
+        printf("Module does not exist.\n");
+        return 1;
     }
 }
 
