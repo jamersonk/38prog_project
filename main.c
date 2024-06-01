@@ -36,7 +36,8 @@ void cmdsList();
 void cmdsAdd();
 int moduleExists(char givenName[]);
 void addStudent(Student *, int);
-void addModule(Student *, int);
+void addModule(Module *, int);
+void cmdsDel(Student *, int);
 
 // global variables
 // modules array
@@ -44,20 +45,20 @@ Module modules[48] = {
     {.name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", .credits = 1},
     {.name = "Module 1", .credits = 4},
     {.name = "Module 2", .credits = 1}
-};
+}; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
 // students array
 Student students[64] = { 
     {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
-};
+    {.name = "Delete", .id = 2, .gpa = 3.9, .credits = 6},
+}; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
-int studentsAllocated = 1; // set to 0 before submission.
-int modulesAllocated = 3; // set to 0 before submission.
+int studentsAllocated = 2; // SET TO 0.
+int modulesAllocated = 3; // SET TO 0.
 
 // BEGIN MAIN
 int main()
 {
-    // students array.
     char input[128] = "void";
     int page;
 
@@ -83,6 +84,9 @@ int main()
         else if (strcmp(input, "add") == 0) {
             cmdsAdd();
         } 
+        else if (strcmp(input, "del") == 0) {
+            cmdsDel(students, studentsAllocated);
+        }
         else {
             printf("Invalid Command.\n");
         }
@@ -224,7 +228,7 @@ void addStudent(Student *students, int num)
     students[num].gpa += cGPA;
 }
 
-void addModule(Student *modules, int num)
+void addModule(Module *modules, int num)
 {
     char moduleName[64];
     int credits = 0, arraySize;
@@ -239,5 +243,34 @@ void addModule(Student *modules, int num)
         strcpy(modules[num].name, moduleName);
         strcpy(modules[num].credits, credits);
         printf("Created %s, with %d credits.", moduleName, credits);
+    }
+}
+
+void cmdsDel(Student *students, int num)
+{
+    int id = 0, pos = 0, i = 0, j = 0;
+    char state;
+    printf("Enter ID of Student you want to delete: ");
+    scanf(" %d", &id);
+    pos = id - 1;
+
+    printf("Please confirm you want to DELETE the below student [y/n]\n");
+    printf("%s %s | ID: %d\n", students[pos].name, students[pos].lastName, students[pos].id);
+    scanf(" %c", &state);
+
+    if (state == 'y') {
+        while (i < studentsAllocated) {
+            if (students[i].id == id) {
+                j = i;
+                while (j < studentsAllocated) {
+                    students[j] = students[j + 1];
+                    j += 1; 
+                    students[j].id = students[j].id - 1;
+                }
+                studentsAllocated = studentsAllocated - 1;
+            }
+            i += 1;
+        }
+        printf("Deleted!\n");
     }
 }
