@@ -30,7 +30,7 @@ typedef struct {
 
 // prototypes
 void cmds(int pg);
-int gpaCalculator(float gpa, int credits);
+float gpaCalculator(float gpa, int credits);
 int getPage();
 void cmdsList();
 void cmdsAdd();
@@ -39,24 +39,25 @@ void addStudent(Student *, int);
 void addModule(Module *, int);
 void cmdsDel(Student *);
 void cmdsEdit(Student *);
+void editFirstName(Student *students, int pos);
+void editLastName(Student *students, int pos);
+void editGPA(Student *students, int pos);
+void linkModule(Student *students, int pos);
 void cmdsView(Student *);
 
 // global variables
 // modules array
 Module modules[48] = {
-    {.name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", .credits = 1},
     {.name = "Module 1", .credits = 4},
-    {.name = "Module 2", .credits = 1}
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
 // students array
 Student students[64] = { 
     {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
-    {.name = "Delete", .id = 2, .gpa = 3.9, .credits = 6},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
-int studentsAllocated = 2; // SET TO 0.
-int modulesAllocated = 3; // SET TO 0.
+int studentsAllocated = 1; // SET TO 0.
+int modulesAllocated = 1; // SET TO 0.
 
 // BEGIN MAIN
 int main()
@@ -70,10 +71,10 @@ int main()
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
         scanf(" %s", input);
 
+        // input processing
         if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) {
             printf("Quitting!\n");
-            printf("=================\n");
-            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.");
+            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.\n");
             return 0;
         }
         else if (strcmp(input, "cmds") == 0) {
@@ -106,26 +107,28 @@ void cmds(int pg)
 {
     if (pg >= 2) {
         printf("Maximum page is 1!");
-        return 1;
     }
-    printf("=================\n");
-    printf("COMMAND LIST\n");
-    printf("=================\n");
-    if (pg == 1) {
-        printf("quit - exits the program. (sudos: close, exit)\n");
-        printf("cmds - lists all available commands.\n");
-        printf("list - lists all students.\n");
-        printf("add - add a new student/module.\n");
-        printf("del - delete a student.");
-        printf("edit - edit a student.");
-        printf("view - view a student in detail.");
+    else {
+        printf("=================\n");
+        printf("COMMAND LIST\n");
+        printf("=================\n");
+        if (pg == 1) {
+            printf("quit - exits the program. (sudos: close, exit)\n");
+            printf("cmds - lists all available commands.\n");
+            printf("list - lists all students.\n");
+            printf("add - add a new student/module.\n");
+            printf("del - delete a student.\n");
+            printf("edit - edit a student.\n");
+            printf("view - view a student in detail.\n");
+        }
+        printf("=================\n");
     }
-    printf("=================\n");
+    
 }
 
-int gpaCalculator(float gpa, int credits)
+float gpaCalculator(float gpa, int credits)
 {
-    float weightedGPA = gpa * (float) credits;
+    float weightedGPA = gpa * (float)credits;
     return weightedGPA;
 }
 
@@ -158,12 +161,12 @@ int moduleExists(char givenName[])
     int moduleExist = 0;
     while (i != modulesAllocated) {
         char* moduleName = modules[i].name;
-        i += 1;
         if (strcmp(moduleName, givenName) == 0) {
             moduleExist = i;
             printf("(System: moduleExists returned TRUE)\n");
             return moduleExist;
         }
+        i += 1;
     }
     moduleExist = -1;
     printf("(System: moduleExists returned FALSE)\n");
@@ -190,8 +193,8 @@ void addStudent(Student *students, int num)
     students[num].id = num + 1;
     char moduleName[64];
     char lastNameState = 'p';
-    float GPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
-    int exitState = 0, credits = 0, tCredits = 0; // creduts is for each new module; tCredits is for total credits.
+    float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
+    int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
 
     printf("Enter the FIRST NAME: ");
     scanf(" %[^\n]s", students[num].name); // %[^\n]d allows for the acceptance of multi word inputs.
@@ -203,6 +206,7 @@ void addStudent(Student *students, int num)
         // for user to input last name.
         printf("Enter the LAST NAME: ");
         scanf(" %[^\n]s", students[num].lastName);        
+        students[num].hasLastName = 1;
     }
 
     // for calculating student gpa
@@ -215,14 +219,16 @@ void addStudent(Student *students, int num)
             // User Input
             printf("Enter the student's GPA: ");
             scanf("  %f", &GPA);
-            printf("Enter the number of credits: ");
-            scanf("  %d", &credits);
 
             // GPA Calculation
-            wGPA = gpaCalculator(GPA, modules[moduleExists(moduleName)].credits);
-            cGPA += wGPA;
-  
+            pos = moduleExists(moduleName);
+            wGPA = gpaCalculator(GPA, modules[pos].credits);
+
             printf("You have added %s with GPA %.2f. \n", moduleName, GPA);
+            credits = modules[pos].credits;
+            tCredits += credits;
+            tGPA += wGPA;
+
             // input for user exit
             printf("Would you like to add another module? [Y/N] ");
             scanf(" %c", &exitRequest);
@@ -236,7 +242,8 @@ void addStudent(Student *students, int num)
         }
     }
     studentsAllocated += 1;
-    students[num].gpa += cGPA;
+    cGPA += tGPA / tCredits;
+    students[num].gpa = cGPA;
 }
 
 void addModule(Module *modules, int num)
@@ -247,12 +254,12 @@ void addModule(Module *modules, int num)
     scanf(" %[^\n]s", moduleName);
     printf("Enter no. of CREDITS: ");
     scanf("%d", credits);
-    if (moduleExists == -1) {
+    if (moduleExists(moduleName) == -1) {
         printf("ERROR: A module with that name already exists.");
     } else {
         // appending newModule to modules array.
         strcpy(modules[num].name, moduleName);
-        strcpy(modules[num].credits, credits);
+        modules[num].credits = credits;
         printf("Created %s, with %d credits.", moduleName, credits);
     }
 }
@@ -322,7 +329,8 @@ void cmdsEdit(Student *students)
 void editFirstName(Student *students, int pos) 
 {
     char newInput[64], confirm;
-    printf("You are changing the FIRST NAME: %s", students[pos].name);
+    printf("You are changing the FIRST NAME: %s\n", students[pos].name);
+    printf("> ");
     scanf(" %s", newInput);
     printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.\n", students[pos].name, newInput);
     printf("> ");
@@ -330,18 +338,17 @@ void editFirstName(Student *students, int pos)
     
     if (confirm == 'y') {
         strcpy(students[pos].name, newInput);
-        return 0;
     } 
     else {
         printf("Cancelled.");
-        return 1;
     }
 }
 
 void editLastName(Student *students, int pos) 
 {
     char newInput[64], confirm;
-    printf("You are changing the LAST NAME: %s", students[pos].lastName);
+    printf("You are changing the LAST NAME: %s\n", students[pos].lastName);
+    printf("> ");
     scanf(" %s", newInput);
     printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.\n", students[pos].lastName, newInput);
     printf("> ");
@@ -349,11 +356,9 @@ void editLastName(Student *students, int pos)
     
     if (confirm == 'y') {
         strcpy(students[pos].lastName, newInput);
-        return 0;
     } 
     else {
         printf("Cancelled.");
-        return 1;
     }
 }
 
@@ -381,7 +386,6 @@ void linkModule(Student *students, int pos)
         students[pos].gpa = tGPA / tCredits;
     } else {
         printf("Module does not exist.\n");
-        return 1;
     }
 }
 
@@ -400,12 +404,17 @@ void cmdsView(Student *students)
     scanf(" %d", &id);
     pos = id - 1;
 
-    if (students[id].hasLastName == 0) {
-        printf("%s\n", students[pos].name);
-    } 
-    else {
-        printf("%s, %s\n", students[pos].lastName, students[pos].name);
+    if (id > studentsAllocated) {
+        printf("ID entered is greater than number of students allocated.")
     }
-    printf("GPA: %.2f\n", students[pos].gpa);
-    printf("Credits: %d\n", students[pos].credits);
+    else {
+        if (students[id].hasLastName == 0) {
+            printf("%s\n", students[pos].name);
+        } 
+        else {
+            printf("%s, %s\n", students[pos].lastName, students[pos].name);
+        }
+        printf("GPA: %.2f\n", students[pos].gpa);
+        printf("Credits: %d\n", students[pos].credits);
+    }
 }
