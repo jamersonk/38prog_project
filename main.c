@@ -26,7 +26,7 @@ typedef struct {
     char lastName [32];
     int id, credits;
     float gpa;
-} Student;
+} Student; // potential to include modules record.
 
 // prototypes
 void cmds(int pg);
@@ -38,6 +38,7 @@ int moduleExists(char givenName[]);
 void addStudent(Student *, int);
 void addModule(Module *, int);
 void cmdsDel(Student *, int);
+void cmdsEdit(Student*, int);
 
 // global variables
 // modules array
@@ -86,6 +87,9 @@ int main()
         } 
         else if (strcmp(input, "del") == 0) {
             cmdsDel(students, studentsAllocated);
+        }
+        else if (strcmp(input, "edit")) {
+
         }
         else {
             printf("Invalid Command.\n");
@@ -274,3 +278,109 @@ void cmdsDel(Student *students, int num)
         printf("Deleted!\n");
     }
 }
+
+void cmdsEdit(Student *students, int num)
+{
+    int id = 0, pos = 0, i = 0;
+    char input[16];
+
+    printf("Enter the ID of the student: ");
+    scanf("  %d", &id);
+    pos = id - 1;
+
+    printf("First Name: %s\n", students[pos].name);
+    if (students[pos].hasLastName == 1) {
+        printf("Last Name: %s\n", students[pos].lastName);
+    }
+    printf("GPA: ", students[pos].gpa);
+
+    while (strcmp(input, "n") != 0 || strcmp(input, "N") != 0) {
+        printf("What do you want to change? \nEnter \"name\" to edit First Name.\nEnter \"last\" to edit Last Name.\nEnter \"gpa\" to edit modules & grades.");
+        printf("To exit, enter \"n\"");
+        scanf("  %s", input);
+        if (strcmp(input, "name")) {
+            editFirstName(students, pos);
+        }
+        else if (strcmp(input, "last")) {
+            editLastName(students, pos);
+        }
+        else if (strcmp(input,"gpa")) {
+            editGPA();
+        }
+        else {
+        printf("Invalid input.\n");
+        }
+    }
+    
+}
+
+void editFirstName(Student *students, int pos) 
+{
+    char newInput[64], confirm;
+    printf("You are changing the FIRST NAME: %s", students[pos].name);
+    scanf(" %s", newInput);
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.");
+    scanf(" %c", &confirm);
+    
+    if (confirm == 'y') {
+        strcpy(students[pos].name, newInput);
+        return 0;
+    } 
+    else {
+        printf("Cancelled.");
+        return 1;
+    }
+}
+
+void editLastName(Student *students, int pos) 
+{
+    char newInput[64], confirm;
+    printf("You are changing the LAST NAME: %s", students[pos].lastName);
+    scanf(" %s", newInput);
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.");
+    scanf(" %c", &confirm);
+    
+    if (confirm == 'y') {
+        strcpy(students[pos].lastName, newInput);
+        return 0;
+    } 
+    else {
+        printf("Cancelled.");
+        return 1;
+    }
+}
+
+void editGPA(Student *students, int pos) 
+{
+    linkModule(); // potentil for inclusion of delinking modules
+}
+
+void linkModule() 
+{
+    char name[64];
+    float GPA = 0.00, wGPA = 0.00, tGPA = 0.00;
+    int credits = 0, tCredits;
+    printf("You are editing the modules associated with %s", students[pos].name);
+    printf("Enter the module NAME: ");
+    scanf(" %s", name);
+    printf("Enter the student's GPA: ");
+    scanf(" %d", GPA);
+
+    if (moduleExists(name) < 0) {
+        printf("Module does not exist.\n");
+        return 1;
+    } else {
+        credits = modules[moduleExists(name)].credits;  
+        tCredits = students[pos].credits + credits;
+        wGPA = gpaCalculator(GPA, modules[moduleExists(name)].credits);
+        tGPA = ((students[pos].gpa * students[pos].credits) + (GPA * credits));
+        students[pos].gpa = tGPA / tCredits;
+    }
+}
+
+/*
+void delinkModule() 
+{
+    // NOT IN USE
+}
+*/
