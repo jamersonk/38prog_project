@@ -38,8 +38,8 @@ int moduleExists(char givenName[]);
 void addStudent(Student *, int);
 void addModule(Module *, int);
 void cmdsDel(Student *);
-void cmdsEdit(Student*);
-void cmdsView(Student *students);
+void cmdsEdit(Student *);
+void cmdsView(Student *);
 
 // global variables
 // modules array
@@ -89,7 +89,10 @@ int main()
         else if (strcmp(input, "del") == 0) {
             cmdsDel(students);
         }
-        else if (strcmp(input, "edit")) {
+        else if (strcmp(input, "edit") == 0) {
+            cmdsEdit(students);
+        }
+        else if (strcmp(input, "view") == 0) {
             cmdsView(students);
         }
         else {
@@ -296,20 +299,21 @@ void cmdsEdit(Student *students)
     if (students[pos].hasLastName == 1) {
         printf("Last Name: %s\n", students[pos].lastName);
     }
-    printf("GPA: ", students[pos].gpa);
+    printf("GPA: %d\n", students[pos].gpa);
 
-    while (strcmp(input, "n") != 0 || strcmp(input, "N") != 0) {
-        printf("What do you want to change? \nEnter \"name\" to edit First Name.\nEnter \"last\" to edit Last Name.\nEnter \"gpa\" to edit modules & grades.");
-        printf("To exit, enter \"n\"");
+    while (strcmp(input, "n") != 0 || strcmp(input, "N" != 0)) {
+        printf("What do you want to change? \nEnter \"name\" to edit First Name.\nEnter \"last\" to edit Last Name.\nEnter \"gpa\" to edit modules & grades.\n");
+        printf("To exit, enter \"n\"\n");
+        printf("> ");
         scanf("  %s", input);
-        if (strcmp(input, "name")) {
+        if (strcmp(input, "name") == 0) {
             editFirstName(students, pos);
         }
-        else if (strcmp(input, "last")) {
+        else if (strcmp(input, "last") == 0) {
             editLastName(students, pos);
         }
-        else if (strcmp(input,"gpa")) {
-            editGPA();
+        else if (strcmp(input,"gpa") == 0) {
+            editGPA(students, pos);
         }
         else {
         printf("Invalid input.\n");
@@ -323,7 +327,7 @@ void editFirstName(Student *students, int pos)
     char newInput[64], confirm;
     printf("You are changing the FIRST NAME: %s", students[pos].name);
     scanf(" %s", newInput);
-    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.");
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.", students[pos].name, newInput);
     scanf(" %c", &confirm);
     
     if (confirm == 'y') {
@@ -341,7 +345,7 @@ void editLastName(Student *students, int pos)
     char newInput[64], confirm;
     printf("You are changing the LAST NAME: %s", students[pos].lastName);
     scanf(" %s", newInput);
-    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.");
+    printf("You are changing %s >> %s. Type \"y\" to confirm. \"n\" to cancel.", students[pos].lastName, newInput);
     scanf(" %c", &confirm);
     
     if (confirm == 'y') {
@@ -354,9 +358,9 @@ void editLastName(Student *students, int pos)
     }
 }
 
-void editGPA() 
+void editGPA(Student *students, int pos) 
 {
-    linkModule(); // potentil for inclusion of delinking modules
+    linkModule(students, pos); // potential for inclusion of delinking modules
 }
 
 void linkModule(Student *students, int pos) 
@@ -364,11 +368,11 @@ void linkModule(Student *students, int pos)
     char name[64];
     float GPA = 0.00, wGPA = 0.00, tGPA = 0.00;
     int credits = 0, tCredits;
-    printf("You are editing the modules associated with %s", students[pos].name);
+    printf("You are editing the modules associated with %s.\n", students[pos].name);
     printf("Enter the module NAME: ");
-    scanf(" %s", name);
+    scanf("  %s", name);
     printf("Enter the student's GPA: ");
-    scanf(" %d", &GPA);
+    scanf("  %d", &GPA);
 
     if (moduleExists(name) < 0) {
         printf("Module does not exist.\n");
@@ -403,6 +407,6 @@ void cmdsView(Student *students)
     else {
         printf("%s, %s\n", students[pos].lastName, students[pos].name);
     }
-    printf("GPA: %.2f", students[pos].gpa);
-    printf("Credits: %d", students[pos].credits);
+    printf("GPA: %.2f\n", students[pos].gpa);
+    printf("Credits: %d\n", students[pos].credits);
 }
