@@ -163,13 +163,11 @@ int moduleExists(char givenName[])
         char* moduleName = modules[i].name;
         if (strcmp(moduleName, givenName) == 0) {
             moduleExist = i;
-            printf("(System: moduleExists returned TRUE)\n");
             return moduleExist;
         }
         i += 1;
     }
     moduleExist = -1;
-    printf("(System: moduleExists returned FALSE)\n");
     return moduleExist;
 }
 
@@ -389,13 +387,6 @@ void linkModule(Student *students, int pos)
     }
 }
 
-/*
-void delinkModule() 
-{
-    // NOT IN USE
-}
-*/
-
 void cmdsView(Student *students) 
 {
     int id, pos;
@@ -405,7 +396,7 @@ void cmdsView(Student *students)
     pos = id - 1;
 
     if (id > studentsAllocated) {
-        printf("ID entered is greater than number of students allocated.")
+        printf("ID entered is greater than number of students allocated.");
     }
     else {
         if (students[id].hasLastName == 0) {
