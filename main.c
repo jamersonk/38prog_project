@@ -4,7 +4,7 @@ COPYRIGHT (C) 2024 JAMES KUANG ZHONGCHUAN
 THIS WORK IS LICENSED UNDER THE GNU GENERAL PUBLIC LICENSE v3.0.
 View the full license text here: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
 
-v1.0 INDEV
+v1.0 
 */
 
 // libraries
