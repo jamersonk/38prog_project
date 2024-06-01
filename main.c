@@ -51,8 +51,6 @@ Student students[64] = {
     {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
 };
 
-int noModules = sizeof(modules) / sizeof(modules[0]);
-int noStudents = sizeof(students) / sizeof(students[0]);
 int studentsAllocated = 1; // set to 0 before submission.
 int modulesAllocated = 3; // set to 0 before submission.
 
@@ -66,8 +64,6 @@ int main()
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
     while (strcmp(input, "quit") != 0) {
-        noModules = sizeof(modules) / sizeof(modules[0]);
-        noStudents = sizeof(students) / sizeof(students[0]);
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
         scanf(" %s", input);
 
@@ -145,7 +141,7 @@ int moduleExists(char givenName[])
 {
     int i = 0;
     int moduleExist = 0;
-    while (i != noModules) {
+    while (i != modulesAllocated) {
         char* moduleName = modules[i].name;
         i += 1;
         if (strcmp(moduleName, givenName) == 0) {
@@ -203,14 +199,13 @@ void addStudent(Student *students, int num)
             char exitRequest; // to detect user exit request.
             // User Input
             printf("Enter the student's GPA: ");
-            scanf("  %f", GPA);
+            scanf("  %f", &GPA);
             printf("Enter the number of credits: ");
-            scanf("  %d", credits);
+            scanf("  %d", &credits);
 
             // GPA Calculation
             wGPA = gpaCalculator(GPA, modules[moduleExists(moduleName)].credits);
             cGPA += wGPA;
-            students[num].gpa = cGPA;
   
             printf("You have added %s with GPA %.2f. \n", moduleName, GPA);
             // input for user exit
@@ -225,6 +220,8 @@ void addStudent(Student *students, int num)
             printf("Module could not be found. Please try again.\n");
         }
     }
+    studentsAllocated += 1;
+    students[num].gpa += cGPA;
 }
 
 void addModule(Student *modules, int num)
