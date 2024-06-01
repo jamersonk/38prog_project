@@ -4,8 +4,7 @@ COPYRIGHT (C) 2024 JAMES KUANG ZHONGCHUAN
 THIS WORK IS LICENSED UNDER THE GNU GENERAL PUBLIC LICENSE v3.0.
 View the full license text here: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
 
-38PROG Programming: Student Record System
-v1.0 INDEV 
+v1.0 INDEV
 */
 
 // libraries
@@ -25,7 +24,7 @@ struct Student {
     char name[64];
     int hasLastName;
     char lastName [32];
-    int id;
+    int id, credits;
     float gpa;
 };
 
@@ -35,20 +34,22 @@ int getPage();
 void cmdsList();
 void cmdsAdd();
 int moduleExists(char givenName[]);
+void addStudent();
+void addModule();
 
 // global variables
 // modules array
 struct Module modules[48] = {
-    {.name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890"},
+    {.name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", .credits = 1},
     {.name = "Module 1", .credits = 4},
     {.name = "Module 2", .credits = 1}
 };
 
 // students array
 struct Student students[128] = { 
-    {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 000001, .gpa = 3.9},
-    {.name = "Bob", .hasLastName = 0, .id = 000002, .gpa = 2.0},
-    {.name = "Owien", .hasLastName = 0, .id = 000003, .gpa = 2.94}
+    {.name = "Owein", .hasLastName = 1, .lastName = "BISMARK III", .id = 1, .gpa = 3.9},
+    {.name = "Bob", .hasLastName = 0, .id = 2, .gpa = 2.0},
+    {.name = "Owien", .hasLastName = 0, .id = 3, .gpa = 2.94}
 };
 
 int noStudents = 3;
@@ -70,7 +71,7 @@ int main()
         if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) {
             printf("Quitting!\n");
             printf("=================\n");
-            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.")
+            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.");
             return 0;
         }
         else if (strcmp(input, "cmds") == 0) {
@@ -106,7 +107,6 @@ void cmds(int pg)
         printf("add - add a new student/module.\n");
     }
     printf("=================\n");
-
 }
 
 int getPage()
@@ -144,7 +144,7 @@ int moduleExists(char givenName[])
             return moduleExist;
         }
     }
-    printf("System: moduleExists returned FALSE")
+    printf("System: moduleExists returned FALSE");
     return moduleExist;
 }
 
@@ -154,59 +154,80 @@ void cmdsAdd()
     printf("Select STUDENT [S] or MODULE [M]: ");
     scanf(" %s", selectAdd);
 
+    // ADD STUDENT
     if (strcmp(selectAdd, "S") == 0) {
-        char firstName[64], lastName[64], moduleName[64];
-        char lastNameState;
-        float GPA = 0.00;
-        int exitState = 0;
-
-        printf("Enter the FIRST NAME: ");
-        scanf(" %[^\n]s", firstName); // %[^\n]d allows for the acceptance of multi word inputs.
-        printf("Does this student have a LAST NAME? [Y/N] ");
-        scanf("  %c", &lastNameState);
-        if (lastNameState == 'y' || lastNameState == 'Y') {
-            printf("Enter the LAST NAME: ");
-            scanf(" %[^\n]s", lastName);        
-        }
-        else if (lastNameState != 'n' || lastNameState == 'N') {
-            printf("Your input is invalid. Please try again.");
-            return 1;
-        }
-        printf("You will now be prompted to enter MODULE INFORMATION.\n");
-        while (exitState != 1) {
-            printf("Enter Module NAME: ");
-        scanf(" %[^\n]s", moduleName);             
-            if (moduleExists(moduleName) == 1) {  
-                char exitRequest;  
-                printf("Enter the student's GPA: ");
-                scanf("  %f", GPA);
-                printf("You have added %s with GPA %.2f. \n", moduleName, GPA);
-                printf("Do you have any other modules to add? [Y/N] ");
-                scanf(" %c", &exitRequest);
-                if (exitRequest == 'N' || exitRequest == 'n') {
-                    exitState = 1;
-                }
-            } else {
-                printf("Module could not be found. Please try again.\n");
-            }
-        }
-        // append to STUDENTS array.
+        addStudent();
     } 
+    // ADD MODULE
     else if (strcmp(selectAdd, "M") == 0) {
-        char moduleName;
-        int credits;
-        printf("Enter module NAME: ");
-        scanf(" %[^\n]s", moduleName);
-        printf("Enter no. of CREDITS: ");
-        scanf("%d", credits);
-        if (moduleExists == 1) {
-            printf("ERROR: A module with that name already exists.");
+        addModule();
+    }   
+}
+
+void addStudent() 
+{
+    char firstName[64], lastName[64], moduleName[64];
+    char lastNameState;
+    float GPA = 0.00, cGPA = 0.00;
+    int exitState = 0, credits = 0, tCredits = 0;
+
+    printf("Enter the FIRST NAME: ");
+    scanf(" %[^\n]s", firstName); // %[^\n]d allows for the acceptance of multi word inputs.
+    printf("Does this student have a LAST NAME? [Y/N] ");
+    scanf("  %c", &lastNameState);
+    if (lastNameState == 'y' || lastNameState == 'Y') {
+        printf("Enter the LAST NAME: ");
+        scanf(" %[^\n]s", lastName);        
+    }
+    else if (lastNameState != 'n' || lastNameState == 'N') {
+        printf("Your input is invalid. Please try again.");
+        return 1;
+    }
+    printf("You will now be prompted to enter MODULE INFORMATION.\n");
+    while (exitState != 1) {
+        printf("Enter Module NAME: ");
+        scanf(" %[^\n]s", moduleName);             
+        if (moduleExists(moduleName) == 1) {  
+            char exitRequest;  
+            printf("Enter the student's GPA: ");
+            scanf("  %f", GPA);
+            printf("Enter the number of credits: ");
+            scanf("  %d", credits);
+
+            tCredits += credits;
+            // calculate & update GPA here.
+                
+            printf("You have added %s with GPA %.2f. \n", moduleName, GPA);
+            printf("Would you like to add another module? [Y/N] ");
+            scanf(" %c", &exitRequest);
+            if (exitRequest == 'N' || exitRequest == 'n') {
+                    exitState = 1;
+            }
         } else {
-            // append to MODULES array
-            printf("Created %s, with %d credits.", moduleName, credits);
+            printf("Module could not be found. Please try again.\n");
         }
     }
-    else {
-        printf("Invalid input. Please try again.\n");
+    int arraySize = sizeof(students) / sizeof(students[0]);
+    arraySize += 1;
+
+    struct Student newStudent = {.name = firstName, .hasLastName = lastNameState, .lastName = lastName, .gpa = cGPA, .id = arraySize, .credits = tCredits};
+    students[arraySize] = newStudent;
+    // implement GPA calculation
+    // append to STUDENTS array.
+}
+
+void addModule()
+{
+    char moduleName;
+    int credits = 0;
+    printf("Enter module NAME: ");
+    scanf(" %[^\n]s", moduleName);
+    printf("Enter no. of CREDITS: ");
+    scanf("%d", credits);
+    if (moduleExists == 1) {
+        printf("ERROR: A module with that name already exists.");
+    } else {
+        // append to MODULES array
+        printf("Created %s, with %d credits.", moduleName, credits);
     }
 }
