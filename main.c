@@ -1,10 +1,6 @@
 /*
-COPYRIGHT (C) 2024 JAMES KUANG ZHONGCHUAN
-
-THIS WORK IS LICENSED UNDER THE GNU GENERAL PUBLIC LICENSE v3.0.
-View the full license text here: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
-
-v1.0 
+    Copyright (C) 2024  JAMES KUANG ZHONGCHUAN
+    v1.0 
 */
 
 // LIBRARIES
@@ -62,38 +58,43 @@ int main()
     char input[128] = "void";
     int page;
 
-    printf("IMPORTANT LICENSE NOTICE:\nStudent Record System  Copyright (C) 2024  James Kuang Zhongchuan\n");
-    printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
-    printf("This is free software, and you are welcome to redistribute it under certain conditions.\n");
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
-    while (strcmp(input, "quit") != 0) {
+    while (strcmp(input, "quit") != 0) 
+    {
         printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
         scanf(" %s", input);
 
         // input processing
-        if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) {
+        if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) 
+        {
             printf("Quitting!\n");
             printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.\n");
             return 0;
         }
-        else if (strcmp(input, "cmds") == 0) {
+        else if (strcmp(input, "cmds") == 0) 
+        {
             page = getPage();
             cmds(page);
         }
-        else if (strcmp(input, "list") == 0) {
+        else if (strcmp(input, "list") == 0) 
+        {
             cmdsList();
         }
-        else if (strcmp(input, "add") == 0) {
+        else if (strcmp(input, "add") == 0) 
+        {
             cmdsAdd();
         } 
-        else if (strcmp(input, "del") == 0) {
+        else if (strcmp(input, "del") == 0) 
+        {
             cmdsDel(students);
         }
-        else if (strcmp(input, "edit") == 0) {
+        else if (strcmp(input, "edit") == 0) 
+        {
             cmdsEdit(students);
         }
-        else if (strcmp(input, "view") == 0) {
+        else if (strcmp(input, "view") == 0) 
+        {
             cmdsView(students);
         }
         else {
@@ -105,14 +106,17 @@ int main()
 // FUNCTIONS
 void cmds(int pg)
 {
-    if (pg >= 2) {
+    if (pg >= 2) 
+    {
         printf("Maximum page is 1!");
     }
-    else {
+    else 
+    {
         printf("=================\n");
         printf("COMMAND LIST\n");
         printf("=================\n");
-        if (pg == 1) {
+        if (pg == 1) 
+        {
             printf("quit - exits the program. (sudos: close, exit)\n");
             printf("cmds - lists all available commands.\n");
             printf("list - lists all students.\n");
@@ -144,11 +148,14 @@ void cmdsList()
 {
     int i = 0;
     printf("ID: NAME\n");
-    while (i != studentsAllocated) {
-        if (students[i].hasLastName == 1) {
+    while (i != studentsAllocated) 
+    {
+        if (students[i].hasLastName == 1) 
+        {
             printf("%d: %s, %s | cGPA: %.2f \n", students[i].id, students[i].lastName, students[i].name, students[i].gpa);
         } 
-        else {
+        else 
+        {
             printf("%d: %s | cGPA: %.2f \n", students[i].id, students[i].name, students[i].gpa);
         }
         i += 1;
@@ -159,9 +166,11 @@ int moduleExists(char givenName[])
 {
     int i = 0;
     int moduleExist = 0;
-    while (i != modulesAllocated) {
+    while (i != modulesAllocated) 
+    {
         char* moduleName = modules[i].name;
-        if (strcmp(moduleName, givenName) == 0) {
+        if (strcmp(moduleName, givenName) == 0) 
+        {
             moduleExist = i;
             return moduleExist;
         }
@@ -178,10 +187,12 @@ void cmdsAdd()
     printf("Select STUDENT [S] or MODULE [M]: ");
     scanf(" %c", &selectAdd);
 
-    if (selectAdd == 'S') {
+    if (selectAdd == 'S') 
+    {
         addStudent(students, studentsAllocated);
     } 
-    else if (selectAdd == 'M') {
+    else if (selectAdd == 'M') 
+    {
         addModule(modules, modulesAllocated);
     } 
 }
@@ -200,7 +211,8 @@ void addStudent(Student *students, int num)
     scanf(" %c", &lastNameState);
 
     // to check if user wants to include a last name.
-    if (lastNameState == 'y') {
+    if (lastNameState == 'y') 
+    {
         // for user to input last name.
         printf("Enter the LAST NAME: ");
         scanf(" %[^\n]s", students[num].lastName);        
@@ -209,10 +221,12 @@ void addStudent(Student *students, int num)
 
     // for calculating student gpa
     printf("You will now be prompted to enter MODULE INFORMATION.\n");
-    while (exitState != 1) {
+    while (exitState != 1) 
+    {
         printf("Enter Module NAME: ");
         scanf(" %[^\n]s", moduleName);             
-        if (moduleExists(moduleName) >= 0) {  
+        if (moduleExists(moduleName) >= 0) 
+        {  
             char exitRequest; // to detect user exit request.
             // User Input
             printf("Enter the student's GPA: ");
@@ -231,10 +245,13 @@ void addStudent(Student *students, int num)
             printf("Would you like to add another module? [Y/N] ");
             scanf(" %c", &exitRequest);
             // check for user exit
-            if (exitRequest == 'N' || exitRequest == 'n') { // to check for user exit input.
-                    exitState = 1;
+            if (exitRequest == 'N' || exitRequest == 'n') // to check for user exit input.
+            { 
+                exitState = 1;
             }
-        } else {
+        } 
+        else 
+        {
             // if user adds in a module that dosen't exist.
             printf("Module could not be found. Please try again.\n");
         }
@@ -248,13 +265,18 @@ void addModule(Module *modules, int num)
 {
     char moduleName[64];
     int credits = 0, arraySize;
+
     printf("Enter module NAME: ");
     scanf(" %[^\n]s", moduleName);
     printf("Enter no. of CREDITS: ");
     scanf("%d", credits);
-    if (moduleExists(moduleName) == -1) {
+
+    if (moduleExists(moduleName) == -1) 
+    {
         printf("ERROR: A module with that name already exists.");
-    } else {
+    } 
+    else 
+    {
         // appending newModule to modules array.
         strcpy(modules[num].name, moduleName);
         modules[num].credits = credits;
@@ -274,11 +296,15 @@ void cmdsDel(Student *students)
     printf("%s %s | ID: %d\n", students[pos].name, students[pos].lastName, students[pos].id);
     scanf(" %c", &state);
 
-    if (state == 'y') {
-        while (i < studentsAllocated) {
-            if (students[i].id == id) {
+    if (state == 'y') 
+    {
+        while (i < studentsAllocated) 
+        {
+            if (students[i].id == id) 
+            {
                 j = i;
-                while (j < studentsAllocated) {
+                while (j < studentsAllocated) 
+                {
                     students[j] = students[j + 1];
                     j += 1; 
                     students[j].id = students[j].id - 1;
@@ -301,23 +327,30 @@ void cmdsEdit(Student *students)
     pos = id - 1;
 
     printf("First Name: %s\n", students[pos].name);
-    if (students[pos].hasLastName == 1) {
+
+    if (students[pos].hasLastName == 1) 
+    {
         printf("Last Name: %s\n", students[pos].lastName);
     }
     printf("GPA: %.2f\n", students[pos].gpa);
 
-    while (strcmp(input, "n") != 0) {
+    while (strcmp(input, "n") != 0) 
+    {
         printf("What do you want to change? \nEnter \"name\" to edit First Name.\nEnter \"last\" to edit Last Name.\nEnter \"gpa\" to edit modules & grades.\n");
         printf("To exit, enter \"n\"\n");
         printf("> ");
         scanf("  %s", input);
-        if (strcmp(input, "name") == 0) {
+
+        if (strcmp(input, "name") == 0) 
+        {
             editFirstName(students, pos);
         }
-        else if (strcmp(input, "last") == 0) {
+        else if (strcmp(input, "last") == 0) 
+        {
             editLastName(students, pos);
         }
-        else if (strcmp(input,"gpa") == 0) {
+        else if (strcmp(input,"gpa") == 0) 
+        {
             editGPA(students, pos);
         }
     }
@@ -334,10 +367,12 @@ void editFirstName(Student *students, int pos)
     printf("> ");
     scanf(" %c", &confirm);
     
-    if (confirm == 'y') {
+    if (confirm == 'y') 
+    {
         strcpy(students[pos].name, newInput);
     } 
-    else {
+    else 
+    {
         printf("Cancelled.");
     }
 }
@@ -352,10 +387,12 @@ void editLastName(Student *students, int pos)
     printf("> ");
     scanf(" %c", &confirm);
     
-    if (confirm == 'y') {
+    if (confirm == 'y') 
+    {
         strcpy(students[pos].lastName, newInput);
     } 
-    else {
+    else 
+    {
         printf("Cancelled.");
     }
 }
@@ -376,13 +413,16 @@ void linkModule(Student *students, int pos)
     printf("Enter the student's GPA: ");
     scanf("  %f", &GPA);
 
-    if (moduleExists(name) >=  0) {
+    if (moduleExists(name) >=  0) 
+    {
         credits = modules[moduleExists(name)].credits;  
         tCredits = students[pos].credits + credits;
         wGPA = gpaCalculator(GPA, modules[moduleExists(name)].credits);
         tGPA = ((students[pos].gpa * students[pos].credits) + (wGPA * credits));
         students[pos].gpa = tGPA / tCredits;
-    } else {
+    } 
+    else 
+    {
         printf("Module does not exist.\n");
     }
 }
@@ -395,16 +435,21 @@ void cmdsView(Student *students)
     scanf(" %d", &id);
     pos = id - 1;
 
-    if (id > studentsAllocated) {
+    if (id > studentsAllocated) 
+    {
         printf("ID entered is greater than number of students allocated.");
     }
-    else {
-        if (students[id].hasLastName == 0) {
+    else 
+    {
+        if (students[id].hasLastName == 0) 
+        {
             printf("%s\n", students[pos].name);
         } 
-        else {
+        else 
+        {
             printf("%s, %s\n", students[pos].lastName, students[pos].name);
         }
+        
         printf("GPA: %.2f\n", students[pos].gpa);
         printf("Credits: %d\n", students[pos].credits);
     }
