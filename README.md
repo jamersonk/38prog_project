@@ -1,2 +1,2 @@
 # Student Record System
-© 2024 James Kuang Zhongchuan
+Copyright © 2024 James Kuang Zhongchuan
