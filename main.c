@@ -7,26 +7,25 @@ View the full license text here: https://www.gnu.org/licenses/gpl-3.0.en.html#li
 v1.0 
 */
 
-// libraries
+// LIBRARIES
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
-// struct for modules array
+// STRUCTS
 typedef struct {
     char name[64];
     int credits;
 } Module;
 
-// struct for student array.
 typedef struct {
     char name[64];
     int hasLastName;
     char lastName [32];
     int id, credits;
     float gpa;
-} Student; // potential to include modules
+} Student; 
 
 // prototypes
 void cmds(int pg);
@@ -45,13 +44,11 @@ void editGPA(Student *students, int pos);
 void linkModule(Student *students, int pos);
 void cmdsView(Student *);
 
-// global variables
-// modules array
+// GLOBAL VARIABLES
 Module modules[48] = {
     {.name = "Module 1", .credits = 4},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
-// students array
 Student students[64] = { 
     {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
@@ -65,6 +62,9 @@ int main()
     char input[128] = "void";
     int page;
 
+    printf("IMPORTANT LICENSE NOTICE:\nStudent Record System  Copyright (C) 2024  James Kuang Zhongchuan\n");
+    printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
+    printf("This is free software, and you are welcome to redistribute it under certain conditions.\n");
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
     while (strcmp(input, "quit") != 0) {
@@ -102,7 +102,7 @@ int main()
     }    
 } // END MAIN
 
-// functions
+// FUNCTIONS
 void cmds(int pg)
 {
     if (pg >= 2) {
@@ -409,3 +409,5 @@ void cmdsView(Student *students)
         printf("Credits: %d\n", students[pos].credits);
     }
 }
+
+// END OF FILE
