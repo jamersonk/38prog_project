@@ -34,7 +34,7 @@ int getPage(); // gets the user input for
 void cmdsList();
 void cmdsAdd();
 int moduleExists(char givenName[]);
-void addStudent(Student *students, int);
+int addStudent(Student *students, int);
 void addModule(Module *students, int);
 void cmdsDel(Student *students);
 void cmdsEdit(Student *students);
@@ -202,7 +202,7 @@ void cmdsAdd()
     } 
 }
 
-void addStudent(Student *students, int num) 
+int addStudent(Student *students, int num) 
 {
     if (studentsAllocated > MAX_STUDENTS)
     {
@@ -233,8 +233,12 @@ void addStudent(Student *students, int num)
     printf("You will now be prompted to enter MODULE INFORMATION.\n");
     while (exitState != 1) 
     {
-        printf("Enter Module NAME: ");
-        scanf(" %[^\n]s", moduleName);             
+        printf("Enter Module NAME: [Enter \"exit\" to exit. (case sensitive)] ");
+        scanf(" %[^\n]s", moduleName); 
+        if (strcmp(moduleName, "exit") == 0)
+        {
+            return 1;
+        }            
         if (moduleExists(moduleName) >= 0) 
         {  
             char exitRequest; // to detect user exit request.
