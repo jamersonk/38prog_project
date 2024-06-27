@@ -9,11 +9,15 @@
 #include <ctype.h>
 #include <string.h>
 
+//CONSTANTS
+#define MAX_STUDENTS 40
+#define MAX_MODULES 8
+
 // STRUCTS
 typedef struct {
     char name[64];
     int credits;
-} Module;
+} Module; // defines "module" struct datatype.
 
 typedef struct {
     char name[64];
@@ -21,19 +25,19 @@ typedef struct {
     char lastName [32];
     int id, credits;
     float gpa;
-} Student; 
+} Student; // defines "student" struct datatype.
 
-// prototypes
-void cmds(int pg);
-float gpaCalculator(float gpa, int credits);
-int getPage();
+// PROTOTYPES
+void cmds(int pg); // prints out commands.
+float gpaCalculator(float gpa, int credits); // calculates student current gpa and returns value.
+int getPage(); // gets the user input for
 void cmdsList();
 void cmdsAdd();
 int moduleExists(char givenName[]);
-void addStudent(Student *, int);
-void addModule(Module *, int);
-void cmdsDel(Student *);
-void cmdsEdit(Student *);
+void addStudent(Student *students, int);
+void addModule(Module *students, int);
+void cmdsDel(Student *students);
+void cmdsEdit(Student *students);
 void editFirstName(Student *students, int pos);
 void editLastName(Student *students, int pos);
 void editGPA(Student *students, int pos);
@@ -41,11 +45,11 @@ void linkModule(Student *students, int pos);
 void cmdsView(Student *);
 
 // GLOBAL VARIABLES
-Module modules[48] = {
+Module modules[MAX_MODULES] = {
     {.name = "Module 1", .credits = 4},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
-Student students[64] = { 
+Student students[MAX_STUDENTS] = { 
     {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
@@ -101,7 +105,8 @@ int main()
             printf("Invalid Command.\n");
         }
     }    
-} // END MAIN
+} 
+// END MAIN
 
 // FUNCTIONS
 void cmds(int pg)
@@ -199,6 +204,11 @@ void cmdsAdd()
 
 void addStudent(Student *students, int num) 
 {
+    if (studentsAllocated > MAX_STUDENTS)
+    {
+        fprintf(stderr, "ERROR: Reached maximum number of students.\n");
+        return 1;
+    }
     students[num].id = num + 1;
     char moduleName[64];
     char lastNameState = 'p';
@@ -264,12 +274,12 @@ void addStudent(Student *students, int num)
 void addModule(Module *modules, int num)
 {
     char moduleName[64];
-    int credits = 0, arraySize;
+    int credits = 0;
 
     printf("Enter module NAME: ");
     scanf(" %[^\n]s", moduleName);
     printf("Enter no. of CREDITS: ");
-    scanf("%d", credits);
+    scanf("%d", &credits);
 
     if (moduleExists(moduleName) == -1) 
     {
@@ -319,7 +329,7 @@ void cmdsDel(Student *students)
 
 void cmdsEdit(Student *students)
 {
-    int id = 0, pos = 0, i = 0;
+    int id = 0, pos = 0;
     char input[16];
 
     printf("Enter the ID of the student: ");
@@ -398,11 +408,6 @@ void editLastName(Student *students, int pos)
 }
 
 void editGPA(Student *students, int pos) 
-{
-    linkModule(students, pos); // potential for inclusion of delinking modules
-}
-
-void linkModule(Student *students, int pos) 
 {
     char name[64];
     float GPA = 0.00, wGPA = 0.00, tGPA = 0.00;
