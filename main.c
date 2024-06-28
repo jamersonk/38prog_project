@@ -34,7 +34,7 @@ int getPage(); // gets the user input for
 void cmdsList();
 void cmdsAdd();
 int moduleExists(char givenName[]);
-int addStudent(Student *students, int);
+void addStudent(Student *students, int);
 void addModule(Module *students, int);
 void cmdsDel(Student *students);
 void cmdsEdit(Student *students);
@@ -46,15 +46,13 @@ void cmdsView(Student *);
 
 // GLOBAL VARIABLES
 Module modules[MAX_MODULES] = {
-    {.name = "Module 1", .credits = 4},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
 Student students[MAX_STUDENTS] = { 
-    {.name = "Owein", .hasLastName = 1, .lastName = "Wong", .id = 1, .gpa = 3.9, .credits = 6},
 }; // DELETE ALL ELEMENTS BEFORE SUBMISSION
 
-int studentsAllocated = 1; // SET TO 0.
-int modulesAllocated = 1; // SET TO 0.
+int studentsAllocated = 0; // SET TO 0.
+int modulesAllocated = 0; // SET TO 0.
 
 // BEGIN MAIN
 int main()
@@ -153,6 +151,12 @@ void cmdsList()
 {
     int i = 0;
     printf("ID: NAME\n");
+    if (studentsAllocated == 0) 
+    {
+        printf("No students have been added. There's nothing to list!\n");
+        return;
+    }
+
     while (i != studentsAllocated) 
     {
         if (students[i].hasLastName == 1) 
@@ -202,12 +206,16 @@ void cmdsAdd()
     } 
 }
 
-int addStudent(Student *students, int num) 
+void addStudent(Student *students, int num) 
 {
     if (studentsAllocated > MAX_STUDENTS)
     {
-        fprintf(stderr, "ERROR: Reached maximum number of students.\n");
-        return 1;
+        printf("ERROR: Reached maximum number of students.\n");
+        return;
+    }
+    else if (modulesAllocated == 0)
+    {
+        printf("ERROR: No modules have been added. Add a module to proceed.\n");
     }
     students[num].id = num + 1;
     char moduleName[64];
@@ -237,7 +245,7 @@ int addStudent(Student *students, int num)
         scanf(" %[^\n]s", moduleName); 
         if (strcmp(moduleName, "exit") == 0)
         {
-            return 1;
+            return;
         }            
         if (moduleExists(moduleName) >= 0) 
         {  
@@ -273,6 +281,7 @@ int addStudent(Student *students, int num)
     studentsAllocated += 1;
     cGPA += tGPA / tCredits;
     students[num].gpa = cGPA;
+    return;
 }
 
 void addModule(Module *modules, int num)
@@ -285,9 +294,10 @@ void addModule(Module *modules, int num)
     printf("Enter no. of CREDITS: ");
     scanf("%d", &credits);
 
-    if (moduleExists(moduleName) == -1) 
+    if (moduleExists(moduleName) == 0) 
     {
-        printf("ERROR: A module with that name already exists.");
+        printf("ERROR: A module with that name already exists.\n");
+        return;
     } 
     else 
     {
@@ -300,11 +310,22 @@ void addModule(Module *modules, int num)
 
 void cmdsDel(Student *students)
 {
+    if (studentsAllocated == 0)
+    {
+        printf("ERROR: No students to delete.\n");
+        return;
+    }// checks that students actually exist.
     int id = 0, pos = 0, i = 0, j = 0;
     char state;
     printf("Enter ID of Student you want to delete: ");
     scanf(" %d", &id);
     pos = id - 1;
+
+    if (pos > studentsAllocated)
+    {
+        printf("ERROR: ID entered is greater than number of students allocated.\n");
+        return;
+    }
 
     printf("Please confirm you want to DELETE the below student [y/n]\n");
     printf("%s %s | ID: %d\n", students[pos].name, students[pos].lastName, students[pos].id);
@@ -340,6 +361,12 @@ void cmdsEdit(Student *students)
     scanf("  %d", &id);
     pos = id - 1;
 
+    if (id > studentsAllocated) 
+    {
+        printf("ERROR: ID entered is greater than number of students allocated.\n");
+        return;
+    } // quit if id exceeds students allocated.
+
     printf("First Name: %s\n", students[pos].name);
 
     if (students[pos].hasLastName == 1) 
@@ -361,6 +388,11 @@ void cmdsEdit(Student *students)
         }
         else if (strcmp(input, "last") == 0) 
         {
+            if (students[id].hasLastName == 0)
+            {
+                printf("ERROR: Student does not have a last name.\n");
+                return;
+            }
             editLastName(students, pos);
         }
         else if (strcmp(input,"gpa") == 0) 
@@ -387,7 +419,7 @@ void editFirstName(Student *students, int pos)
     } 
     else 
     {
-        printf("Cancelled.");
+        printf("Cancelled.\n");
     }
 }
 
