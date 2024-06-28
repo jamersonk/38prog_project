@@ -351,11 +351,11 @@ void cmdsDel(Student *students)
                     j++;
                 }
                 studentsAllocated = studentsAllocated - 1;
+                break;
             }
             i += 1;
         }
         printf("Deleted!\n");
-        studentsAllocated--;
     }
 }
 
