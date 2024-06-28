@@ -279,7 +279,7 @@ void addStudent(Student *students, int num)
             printf("Module could not be found. Please try again.\n");
         }
     }
-    studentsAllocated += 1;
+    studentsAllocated++;
     cGPA += tGPA / tCredits;
     students[num].gpa = cGPA;
     return;
@@ -306,6 +306,7 @@ void addModule(Module *modules, int num)
         strcpy(modules[num].name, moduleName);
         modules[num].credits = credits;
         printf("Created %s, with %d credits.", moduleName, credits);
+        modulesAllocated++;
     }
 }
 
@@ -350,6 +351,7 @@ void cmdsDel(Student *students)
             i += 1;
         }
         printf("Deleted!\n");
+        studentsAllocated--;
     }
 }
 
