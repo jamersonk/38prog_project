@@ -359,7 +359,7 @@ void cmdsDel(Student *students)
         {
             if (students[i].id == id) 
             {
-                j = i+1;
+                j = i;
                 while (j < studentsAllocated) 
                 {
                     strcpy(students[j].name, students[j + 1].name);
@@ -367,7 +367,6 @@ void cmdsDel(Student *students)
                     students[j].gpa = students[j + 1].gpa;
                     students[j].credits = students[j + 1].credits;
                     students[j].hasLastName = students[j + 1].hasLastName;
-                    students[j].id = students[j].id - 1;
                     j++;
                 }
                 studentsAllocated = studentsAllocated - 1;
