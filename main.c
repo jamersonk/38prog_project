@@ -28,7 +28,7 @@ typedef struct {
 } Student; // defines "student" struct datatype.
 
 // PROTOTYPES
-int check(int s, int input);
+int check(int input);
 void cmds(int pg); // prints out commands.
 float gpaCalculator(float gpa, int credits); // calculates student current gpa and returns value.
 int getPage(); // gets the user input for
@@ -107,26 +107,22 @@ int main()
 // END MAIN
 
 // FUNCTIONS
-int check(int s, int input) 
+int check(int input) 
 {
-    // s=1 --> student, s=2 --> module
-    if (s = 1)
+    if (studentsAllocated == MAX_STUDENTS)
     {
-        if (studentsAllocated == MAX_STUDENTS)
-        {
-            printf("ERROR: Reached maximum number of students.\n");
-            return 1;
-        }
-        else if (studentsAllocated == 0)
-        {
-            printf("ERROR: Unable to proceed as there are no students.\n");
-            return 1;
-        }
-        else if (input > studentsAllocated || input <= 0)
-        {
-            printf("ERROR: ID entered is invalid.\n");
-            return 1;
-        }
+        printf("ERROR: Reached maximum number of students.\n");
+        return 1;
+    }
+    else if (studentsAllocated == 0)
+    {
+        printf("ERROR: Unable to proceed as there are no students.\n");
+        return 1;
+    }
+    else if (input > studentsAllocated || input <= 0)
+    {
+        printf("ERROR: ID entered is invalid.\n");
+        return 1;
     }
     return 0;
 }
@@ -347,7 +343,7 @@ void cmdsDel(Student *students)
     scanf(" %d", &id);
     pos = id - 1;
 
-    if (check(1, id) == 1)
+    if (check(id) == 1)
     {
         return;
     }
@@ -391,7 +387,7 @@ void cmdsEdit(Student *students)
     scanf("  %d", &id);
     pos = id - 1;
 
-    if (check(1, id) == 1)
+    if (check(id) == 1)
     {
         return;
     }
