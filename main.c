@@ -373,6 +373,11 @@ void cmdsEdit(Student *students)
         printf("ERROR: ID entered is greater than number of students allocated.\n");
         return;
     } // quit if id exceeds students allocated.
+    else if (id <= 0)
+    {
+        printf("ID entered is invalid.");
+        return;
+    }
 
     printf("First Name: %s\n", students[pos].name);
 
@@ -486,6 +491,12 @@ void cmdsView(Student *students)
     if (id > studentsAllocated) 
     {
         printf("ID entered is greater than number of students allocated.\n");
+        return;
+    }
+    else if (id <= 0)
+    {
+        printf("ID entered is invalid.\n");
+        return;
     }
     else 
     {
