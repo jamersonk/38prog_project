@@ -350,6 +350,7 @@ void cmdsDel(Student *students)
 
     printf("Please confirm you want to DELETE the below student [y/n]\n");
     printf("%s %s | ID: %d\n", students[pos].name, students[pos].lastName, students[pos].id);
+    printf("> ");
     scanf(" %c", &state);
 
     if (state == 'y') 
@@ -358,7 +359,7 @@ void cmdsDel(Student *students)
         {
             if (students[i].id == id) 
             {
-                j = i;
+                j = i+1;
                 while (j < studentsAllocated) 
                 {
                     strcpy(students[j].name, students[j + 1].name);
