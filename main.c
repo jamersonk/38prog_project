@@ -342,9 +342,13 @@ void cmdsDel(Student *students)
                 j = i;
                 while (j < studentsAllocated) 
                 {
-                    students[j] = students[j + 1];
-                    j += 1; 
+                    strcpy(students[j].name, students[j + 1].name);
+                    strcpy(students[j].lastName, students[j + 1].lastName);
+                    students[j].gpa = students[j + 1].gpa;
+                    students[j].credits = students[j + 1].credits;
+                    students[j].hasLastName = students[j + 1].hasLastName;
                     students[j].id = students[j].id - 1;
+                    j++;
                 }
                 studentsAllocated = studentsAllocated - 1;
             }
