@@ -216,6 +216,7 @@ void addStudent(Student *students, int num)
     else if (modulesAllocated == 0)
     {
         printf("ERROR: No modules have been added. Add a module to proceed.\n");
+        return;
     }
     students[num].id = num + 1;
     char moduleName[64];
@@ -478,7 +479,7 @@ void cmdsView(Student *students)
 
     if (id > studentsAllocated) 
     {
-        printf("ID entered is greater than number of students allocated.");
+        printf("ID entered is greater than number of students allocated.\n");
     }
     else 
     {
