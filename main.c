@@ -29,20 +29,19 @@ typedef struct {
 
 // PROTOTYPES
 int check(int input);
-void cmds(int pg); // prints out commands.
+void cmds(); // prints out commands.
 float gpaCalculator(float gpa, int credits); // calculates student current gpa and returns value.
-int getPage(); // gets the user input for
-void cmdsList();
-void cmdsAdd();
-int moduleExists(char givenName[]);
-void addStudent(Student *students, int);
-void addModule(Module *students, int);
-void cmdsDel(Student *students);
-void cmdsEdit(Student *students);
-void editFirstName(Student *students, int pos);
-void editLastName(Student *students, int pos);
-void editGPA(Student *students, int pos);
-void cmdsView(Student *);
+void cmdsList(); // list all students
+void cmdsAdd(); // add a new student/module
+int moduleExists(char givenName[]); // checks if the module name already exists
+void addStudent(Student *students, int); // adding new student
+void addModule(Module *students, int); // adding new module
+void cmdsDel(Student *students); // delete student
+void cmdsEdit(Student *students); // edit student
+void editFirstName(Student *students, int pos); // edit first name for student
+void editLastName(Student *students, int pos); // edit last name for student
+void editGPA(Student *students, int pos); // edit GPA for student
+void cmdsView(Student *); // view detailed info about student
 
 // GLOBAL VARIABLES
 Module modules[MAX_MODULES] = {
@@ -76,8 +75,7 @@ int main()
         }
         else if (strcmp(input, "cmds") == 0) 
         {
-            page = getPage();
-            cmds(page);
+            cmds();
         }
         else if (strcmp(input, "list") == 0) 
         {
@@ -107,19 +105,19 @@ int main()
 // END MAIN
 
 // FUNCTIONS
-int check(int input) 
+int check(int input) // some data validation
 {
-    if (studentsAllocated == MAX_STUDENTS)
+    if (studentsAllocated == MAX_STUDENTS) // prevents adding more students than total allowed
     {
         printf("ERROR: Reached maximum number of students.\n");
         return 1;
     }
-    else if (studentsAllocated == 0)
+    else if (studentsAllocated == 0) // prevents editing/deleting when students are 0.
     {
         printf("ERROR: Unable to proceed as there are no students.\n");
         return 1;
     }
-    else if (input > studentsAllocated || input <= 0)
+    else if (input > studentsAllocated || input <= 0) // checks that the ID is valid.
     {
         printf("ERROR: ID entered is invalid.\n");
         return 1;
@@ -127,44 +125,25 @@ int check(int input)
     return 0;
 }
 
-void cmds(int pg)
+void cmds()
 {
-    if (pg >= 2) 
-    {
-        printf("Maximum page is 1!");
-    }
-    else 
-    {
-        printf("=================\n");
-        printf("COMMAND LIST\n");
-        printf("=================\n");
-        if (pg == 1) 
-        {
-            printf("quit - exits the program. (sudos: close, exit)\n");
-            printf("cmds - lists all available commands.\n");
-            printf("list - lists all students.\n");
-            printf("add - add a new student/module.\n");
-            printf("del - delete a student.\n");
-            printf("edit - edit a student.\n");
-            printf("view - view a student in detail.\n");
-        }
-        printf("=================\n");
-    }
-    
+    printf("=================\n");
+    printf("COMMAND LIST\n");
+    printf("=================\n");
+    printf("quit - exits the program. (sudos: close, exit)\n");
+    printf("cmds - lists all available commands.\n");
+    printf("list - lists all students.\n");
+    printf("add - add a new student/module.\n");
+    printf("del - delete a student.\n");
+    printf("edit - edit a student.\n");
+    printf("view - view a student in detail.\n");
+    printf("=================\n");
 }
 
 float gpaCalculator(float gpa, int credits)
 {
     float weightedGPA = gpa * (float)credits;
     return weightedGPA;
-}
-
-int getPage()
-{
-    int page;
-    printf("Please enter your desired page: ");
-    scanf(" %d", &page);
-    return page;
 }
 
 void cmdsList()
