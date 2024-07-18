@@ -58,6 +58,8 @@ int main()
 {
     char input[128] = "void";
     int page;
+    FILE* modulesList = fopen("modules.txt","r+");
+    FILE* studentsList = fopen("students.txt","r+");
 
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
@@ -71,6 +73,8 @@ int main()
         {
             printf("Quitting!\n");
             printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.\n");
+            fclose(modulesList);
+            fclose(studentsList);
             return 0;
         }
         else if (strcmp(input, "cmds") == 0) 
