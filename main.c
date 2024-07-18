@@ -57,9 +57,61 @@ int modulesAllocated = 0; // SET TO 0.
 int main()
 {
     char input[128] = "void";
-    int page;
-    FILE* modulesList = fopen("modules.txt","r+");
-    FILE* studentsList = fopen("students.txt","r+");
+    
+    FILE *modulesList;
+    modulesList = fopen("modules.txt", "r+");
+    if (modulesList == NULL)
+    {
+        modulesList = fopen("modules.txt", "w+");
+        printf("Error: modules.txt not found. Creating new file.\n");
+        if (modulesList == NULL)
+        {
+            printf("Error: Unable to create modules.txt\n");
+            return 1;
+        }
+    }
+    FILE *studentsList;
+    studentsList = fopen("students.txt", "r+");
+    if (studentsList == NULL)
+    {
+        studentsList = fopen("students.txt", "w+");
+        printf("Error: students.txt not found. Creating new file.\n");
+        if (studentsList == NULL)
+        {
+            printf("Error: Unable to create students.txt\n");
+            return 1;
+        }
+    }
+    FILE *numStudents;
+    numStudents = fopen("numStudents.txt", "r+");
+    if (numStudents == NULL)
+    {
+        numStudents = fopen("numStudents.txt","w+");
+        printf("Error: modules.txt not found. Creating new file.\n");
+        if (numStudents == NULL)
+        {
+            printf("Error: Unable to create numStudents.txt\n");
+            return 1;
+        }
+    }
+    FILE *numModules;
+    numModules = fopen("numModules.txt", "r+");
+    if (numModules == NULL)
+    {
+        numModules = fopen("numModules.txt", "w+");
+        printf("Error: modules.txt not found. Creating new file.\n");
+        if (numModules == NULL)
+        {
+            printf("Error: Unable to create numModules.txt\n");
+            return 1;
+        }
+    }
+
+    // read from modules.txt
+    // sync data to modules
+
+    // read from students.txt
+    // sync data to studnts
 
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
@@ -69,15 +121,7 @@ int main()
         scanf(" %s", input);
 
         // input processing
-        if (strcmp(input, "quit") == 0 || strcmp(input, "close") == 0 || strcmp(input, "exit") == 0) 
-        {
-            printf("Quitting!\n");
-            printf("THANK YOU FOR USING THE STUDENT RECORD SYSTEM.\n");
-            fclose(modulesList);
-            fclose(studentsList);
-            return 0;
-        }
-        else if (strcmp(input, "cmds") == 0) 
+        if (strcmp(input, "cmds") == 0) 
         {
             cmds();
         }
@@ -101,10 +145,13 @@ int main()
         {
             cmdsView(students);
         }
-        else {
-            printf("Invalid Command.\n");
-        }
-    }    
+    }
+    fwrite(&studentsAllocated, sizeof(int), 1, numStudents);
+    fwrite(&modulesAllocated, sizeof(int), 1, numModules);
+    fclose(numStudents);
+    fclose(numModules);
+    // fclose(modulesList);
+    fclose(studentsList);
 } 
 // END MAIN
 
