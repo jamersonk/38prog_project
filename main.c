@@ -57,13 +57,13 @@ int modulesAllocated = 0; // SET TO 0.
 int main()
 {
     char input[128] = "void";
+    int i = 0, j = 0;
     
     FILE *modulesList;
-    modulesList = fopen("modules.txt", "r+");
+    modulesList = fopen("modules.txt", "rb");
     if (modulesList == NULL)
     {
-        modulesList = fopen("modules.txt", "w+");
-        printf("Error: modules.txt not found. Creating new file.\n");
+        modulesList = fopen("modules.txt", "wb+");
         if (modulesList == NULL)
         {
             printf("Error: Unable to create modules.txt\n");
@@ -71,11 +71,10 @@ int main()
         }
     }
     FILE *studentsList;
-    studentsList = fopen("students.txt", "r+");
+    studentsList = fopen("students.txt", "rb");
     if (studentsList == NULL)
     {
-        studentsList = fopen("students.txt", "w+");
-        printf("Error: students.txt not found. Creating new file.\n");
+        studentsList = fopen("students.txt", "wb+");
         if (studentsList == NULL)
         {
             printf("Error: Unable to create students.txt\n");
@@ -87,7 +86,6 @@ int main()
     if (numStudents == NULL)
     {
         numStudents = fopen("numStudents.txt","w+");
-        printf("Error: modules.txt not found. Creating new file.\n");
         if (numStudents == NULL)
         {
             printf("Error: Unable to create numStudents.txt\n");
@@ -99,7 +97,6 @@ int main()
     if (numModules == NULL)
     {
         numModules = fopen("numModules.txt", "w+");
-        printf("Error: modules.txt not found. Creating new file.\n");
         if (numModules == NULL)
         {
             printf("Error: Unable to create numModules.txt\n");
@@ -107,11 +104,22 @@ int main()
         }
     }
 
-    // read from modules.txt
-    // sync data to modules
-
-    // read from students.txt
-    // sync data to studnts
+    fread(&studentsAllocated, sizeof(int), 1, numStudents);
+    fread(&modulesAllocated, sizeof(int), 1, numModules);
+    while (i < modulesAllocated)
+    {
+        fread(&modules[i], sizeof(Module), 1, modulesList);
+        i++;
+    } i = 0;
+    while (j < studentsAllocated)
+    {
+        fread(&students[j], sizeof(Student), 1, studentsList);
+        j++;
+    }
+    fclose(modulesList);
+    fclose(studentsList);
+    fclose(numStudents);
+    fclose(numModules);
 
     printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
 
@@ -146,11 +154,22 @@ int main()
             cmdsView(students);
         }
     }
+    numStudents = fopen("numStudents.txt", "wb");
     fwrite(&studentsAllocated, sizeof(int), 1, numStudents);
+
+    numModules = fopen("numModules.txt", "wb");
     fwrite(&modulesAllocated, sizeof(int), 1, numModules);
+
+    modulesList = fopen("modules.txt", "wb");
+    fwrite(&modules, sizeof(Module), modulesAllocated, modulesList);
+
+    studentsList = fopen("students.txt", "wb");
+    fwrite(&students, sizeof(Student), studentsAllocated, studentsList);
+    
+    // close all files.
     fclose(numStudents);
     fclose(numModules);
-    // fclose(modulesList);
+    fclose(modulesList);
     fclose(studentsList);
 } 
 // END MAIN
