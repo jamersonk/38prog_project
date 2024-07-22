@@ -10,8 +10,8 @@
 #include <string.h>
 
 //CONSTANTS
-#define MAX_STUDENTS 1
-#define MAX_MODULES 1
+#define MAX_STUDENTS 64
+#define MAX_MODULES 16
 
 // STRUCTS
 typedef struct {
