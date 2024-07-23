@@ -12,6 +12,8 @@
 //CONSTANTS
 #define MAX_STUDENTS 64
 #define MAX_MODULES 16
+#define MAX_STUDENTS 64
+#define MAX_MODULES 16
 
 // STRUCTS
 typedef struct {
@@ -73,6 +75,7 @@ int main()
         {
             printf("Error: Unable to create modules.txt\n");
             return EXIT_FAILURE;
+            return EXIT_FAILURE;
         }
     }
     studentsList = fopen("students.txt", "rb");
@@ -82,6 +85,7 @@ int main()
         if (studentsList == NULL)
         {
             printf("Error: Unable to create students.txt\n");
+            return EXIT_FAILURE;
             return EXIT_FAILURE;
         }
     }
@@ -93,8 +97,10 @@ int main()
         {
             printf("Error: Unable to create numStudents.txt\n");
             return EXIT_FAILURE;
+            return EXIT_FAILURE;
         }
     }
+
 
     numModules = fopen("numModules.txt", "r+");
     if (numModules == NULL)
@@ -103,6 +109,7 @@ int main()
         if (numModules == NULL)
         {
             printf("Error: Unable to create numModules.txt\n");
+            return EXIT_FAILURE;
             return EXIT_FAILURE;
         }
     }
@@ -113,6 +120,7 @@ int main()
     {
         fread(&modules[i], sizeof(Module), 1, modulesList);
         i++;
+    }
     }
     while (j < studentsAllocated)
     {
@@ -298,8 +306,14 @@ void addStudent(Student *students, int num)
     float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
     int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
 
+    students[num].id = num + 1;
+    char moduleName[64], lastNameState = 'p';
+    float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
+    int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
+
     if (studentsAllocated > MAX_STUDENTS)
     {
+        printf("ERROR: Reached maximum number of students allowed.\n");
         printf("ERROR: Reached maximum number of students allowed.\n");
         return;
     }
@@ -333,9 +347,11 @@ void addStudent(Student *students, int num)
             return;
         }            
         else if (moduleExists(moduleName) >= 0) 
+        else if (moduleExists(moduleName) >= 0) 
         {  
             char exitRequest; // to detect user exit request.
             // User Input
+            
             
             printf("Enter the student's GPA: ");
             scanf("  %f", &GPA);
@@ -374,6 +390,12 @@ void addModule(Module *modules, int num)
 {
     char moduleName[64];
     int credits = 0;
+
+    if (modulesAllocated >= MAX_MODULES)
+    {
+        printf("ERROR: Reached maximum number of modules allowed.\n");
+        return;
+    }
 
     if (modulesAllocated >= MAX_MODULES)
     {
