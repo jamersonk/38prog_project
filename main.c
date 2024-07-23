@@ -10,8 +10,8 @@
 #include <string.h>
 
 //CONSTANTS
-#define MAX_STUDENTS 40
-#define MAX_MODULES 8
+#define MAX_STUDENTS 64
+#define MAX_MODULES 16
 
 // STRUCTS
 typedef struct {
@@ -28,6 +28,7 @@ typedef struct {
 } Student; // defines "student" struct datatype.
 
 // PROTOTYPES
+void PrintBars(); //prints a seperator
 int check(int input);
 void cmds(); // prints out commands.
 float gpaCalculator(float gpa, int credits); // calculates student current gpa and returns value.
@@ -58,8 +59,12 @@ int main()
 {
     char input[128] = "void";
     int i = 0, j = 0;
-    
-    FILE *modulesList;
+
+    // opening files & validating that they've been opened.
+    FILE *modulesList, *studentsList, *numStudents, *numModules;
+
+    printf("Loading...\n");
+
     modulesList = fopen("modules.txt", "rb");
     if (modulesList == NULL)
     {
@@ -67,10 +72,9 @@ int main()
         if (modulesList == NULL)
         {
             printf("Error: Unable to create modules.txt\n");
-            return 1;
+            return EXIT_FAILURE;
         }
     }
-    FILE *studentsList;
     studentsList = fopen("students.txt", "rb");
     if (studentsList == NULL)
     {
@@ -78,10 +82,9 @@ int main()
         if (studentsList == NULL)
         {
             printf("Error: Unable to create students.txt\n");
-            return 1;
+            return EXIT_FAILURE;
         }
     }
-    FILE *numStudents;
     numStudents = fopen("numStudents.txt", "r+");
     if (numStudents == NULL)
     {
@@ -89,10 +92,10 @@ int main()
         if (numStudents == NULL)
         {
             printf("Error: Unable to create numStudents.txt\n");
-            return 1;
+            return EXIT_FAILURE;
         }
     }
-    FILE *numModules;
+
     numModules = fopen("numModules.txt", "r+");
     if (numModules == NULL)
     {
@@ -100,7 +103,7 @@ int main()
         if (numModules == NULL)
         {
             printf("Error: Unable to create numModules.txt\n");
-            return 1;
+            return EXIT_FAILURE;
         }
     }
 
@@ -110,7 +113,7 @@ int main()
     {
         fread(&modules[i], sizeof(Module), 1, modulesList);
         i++;
-    } i = 0;
+    }
     while (j < studentsAllocated)
     {
         fread(&students[j], sizeof(Student), 1, studentsList);
@@ -121,12 +124,12 @@ int main()
     fclose(numStudents);
     fclose(numModules);
 
-    printf("WELCOME TO THE STUDENT RECORD SYSTEM!");
-
+    // begining actual program
+    system("cls");
     while (strcmp(input, "quit") != 0) 
     {
-        printf("\nPlease enter a command. Enter \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
-        scanf(" %s", input);
+        printf("Enter a command. \"cmds\" for a list of commands; \"quit\" to exit.\n> ");
+        scanf("  %s", input);
 
         // input processing
         if (strcmp(input, "cmds") == 0) 
@@ -153,6 +156,14 @@ int main()
         {
             cmdsView(students);
         }
+        else if (strcmp(input, "clear") == 0)
+        {
+            system("cls");
+        }
+        else if (strcmp(input, "quit") != 0)
+        {
+            printf("Invalid command. Type \"cmds\" for a list of commands.\n");
+        }
     }
     numStudents = fopen("numStudents.txt", "wb");
     fwrite(&studentsAllocated, sizeof(int), 1, numStudents);
@@ -175,6 +186,11 @@ int main()
 // END MAIN
 
 // FUNCTIONS
+void PrintBars()
+{
+    printf("-----------------------------------------------------------------------------\n");
+}
+
 int check(int input) // some data validation
 {
     if (studentsAllocated == MAX_STUDENTS) // prevents adding more students than total allowed
@@ -197,17 +213,18 @@ int check(int input) // some data validation
 
 void cmds()
 {
-    printf("=================\n");
-    printf("COMMAND LIST\n");
-    printf("=================\n");
-    printf("quit - exits the program. (sudos: close, exit)\n");
+    PrintBars();
+    printf("AVAILABLE COMMANDS (page 1 of 1)\n");
+    PrintBars();
+    printf("quit - exits the program.\n");
     printf("cmds - lists all available commands.\n");
     printf("list - lists all students.\n");
     printf("add - add a new student/module.\n");
     printf("del - delete a student.\n");
     printf("edit - edit a student.\n");
     printf("view - view a student in detail.\n");
-    printf("=================\n");
+    printf("clear - clears the termnal.\n");
+    PrintBars();
 }
 
 float gpaCalculator(float gpa, int credits)
@@ -261,7 +278,6 @@ int moduleExists(char givenName[])
 void cmdsAdd()
 {
     char selectAdd = 'p';
-    
     printf("Select STUDENT [S] or MODULE [M]: ");
     scanf(" %c", &selectAdd);
 
@@ -277,9 +293,14 @@ void cmdsAdd()
 
 void addStudent(Student *students, int num) 
 {
+    students[num].id = num + 1;
+    char moduleName[64], lastNameState = 'p';
+    float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
+    int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
+
     if (studentsAllocated > MAX_STUDENTS)
     {
-        printf("ERROR: Reached maximum number of students.\n");
+        printf("ERROR: Reached maximum number of students allowed.\n");
         return;
     }
     else if (modulesAllocated == 0)
@@ -287,11 +308,6 @@ void addStudent(Student *students, int num)
         printf("ERROR: No modules have been added. Add a module to proceed.\n");
         return;
     }
-    students[num].id = num + 1;
-    char moduleName[64];
-    char lastNameState = 'p';
-    float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
-    int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
 
     printf("Enter the FIRST NAME: ");
     scanf(" %[^\n]s", students[num].name); // %[^\n]d allows for the acceptance of multi word inputs.
@@ -301,7 +317,6 @@ void addStudent(Student *students, int num)
     // to check if user wants to include a last name.
     if (lastNameState == 'y') 
     {
-        // for user to input last name.
         printf("Enter the LAST NAME: ");
         scanf(" %[^\n]s", students[num].lastName);        
         students[num].hasLastName = 1;
@@ -317,10 +332,11 @@ void addStudent(Student *students, int num)
         {
             return;
         }            
-        if (moduleExists(moduleName) >= 0) 
+        else if (moduleExists(moduleName) >= 0) 
         {  
             char exitRequest; // to detect user exit request.
             // User Input
+            
             printf("Enter the student's GPA: ");
             scanf("  %f", &GPA);
 
@@ -358,6 +374,12 @@ void addModule(Module *modules, int num)
 {
     char moduleName[64];
     int credits = 0;
+
+    if (modulesAllocated >= MAX_MODULES)
+    {
+        printf("ERROR: Reached maximum number of modules allowed.\n");
+        return;
+    }
 
     printf("Enter module NAME: ");
     scanf(" %[^\n]s", moduleName);
