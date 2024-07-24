@@ -1,17 +1,15 @@
 /*
     Copyright (C) 2024  JAMES KUANG ZHONGCHUAN
-    v1.0 
+    v1.1.1
 */
 
-// LIBRARIES
+// HEADER FILES
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
-//CONSTANTS
-#define MAX_STUDENTS 64
-#define MAX_MODULES 16
+// CONSTANTS
 #define MAX_STUDENTS 64
 #define MAX_MODULES 16
 
@@ -45,6 +43,7 @@ void editFirstName(Student *students, int pos); // edit first name for student
 void editLastName(Student *students, int pos); // edit last name for student
 void editGPA(Student *students, int pos); // edit GPA for student
 void cmdsView(Student *); // view detailed info about student
+int reset(); // deletes all previously stored files.
 
 // GLOBAL VARIABLES
 Module modules[MAX_MODULES] = {
@@ -65,8 +64,6 @@ int main()
     // opening files & validating that they've been opened.
     FILE *modulesList, *studentsList, *numStudents, *numModules;
 
-    printf("Loading...\n");
-
     modulesList = fopen("modules.txt", "rb");
     if (modulesList == NULL)
     {
@@ -74,7 +71,6 @@ int main()
         if (modulesList == NULL)
         {
             printf("Error: Unable to create modules.txt\n");
-            return EXIT_FAILURE;
             return EXIT_FAILURE;
         }
     }
@@ -86,7 +82,6 @@ int main()
         {
             printf("Error: Unable to create students.txt\n");
             return EXIT_FAILURE;
-            return EXIT_FAILURE;
         }
     }
     numStudents = fopen("numStudents.txt", "r+");
@@ -96,7 +91,6 @@ int main()
         if (numStudents == NULL)
         {
             printf("Error: Unable to create numStudents.txt\n");
-            return EXIT_FAILURE;
             return EXIT_FAILURE;
         }
     }
@@ -110,7 +104,6 @@ int main()
         {
             printf("Error: Unable to create numModules.txt\n");
             return EXIT_FAILURE;
-            return EXIT_FAILURE;
         }
     }
 
@@ -120,7 +113,6 @@ int main()
     {
         fread(&modules[i], sizeof(Module), 1, modulesList);
         i++;
-    }
     }
     while (j < studentsAllocated)
     {
@@ -168,6 +160,10 @@ int main()
         {
             system("cls");
         }
+        else if (strcmp(input, "reset") == 0)
+        {
+            reset();
+        }
         else if (strcmp(input, "quit") != 0)
         {
             printf("Invalid command. Type \"cmds\" for a list of commands.\n");
@@ -203,17 +199,17 @@ int check(int input) // some data validation
 {
     if (studentsAllocated == MAX_STUDENTS) // prevents adding more students than total allowed
     {
-        printf("ERROR: Reached maximum number of students.\n");
+        printf("Error: Reached maximum number of students.\n");
         return 1;
     }
     else if (studentsAllocated == 0) // prevents editing/deleting when students are 0.
     {
-        printf("ERROR: Unable to proceed as there are no students.\n");
+        printf("Error: No students have been entered.\n");
         return 1;
     }
     else if (input > studentsAllocated || input <= 0) // checks that the ID is valid.
     {
-        printf("ERROR: ID entered is invalid.\n");
+        printf("Error: ID entered is invalid.\n");
         return 1;
     }
     return 0;
@@ -232,6 +228,7 @@ void cmds()
     printf("edit - edit a student.\n");
     printf("view - view a student in detail.\n");
     printf("clear - clears the termnal.\n");
+    printf("reset - deletes all stored data.");
     PrintBars();
 }
 
@@ -306,14 +303,8 @@ void addStudent(Student *students, int num)
     float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
     int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
 
-    students[num].id = num + 1;
-    char moduleName[64], lastNameState = 'p';
-    float GPA = 0.00, tGPA = 0.00, cGPA = 0.00, wGPA = 0.00; // GPA is for each new module; cGPA is total GPA; wGPA is weighted GPA for each new module.
-    int exitState = 0, credits, tCredits = 0, pos = 0; // creduts is for each new module; tCredits is for total credits.
-
     if (studentsAllocated > MAX_STUDENTS)
     {
-        printf("ERROR: Reached maximum number of students allowed.\n");
         printf("ERROR: Reached maximum number of students allowed.\n");
         return;
     }
@@ -346,7 +337,6 @@ void addStudent(Student *students, int num)
         {
             return;
         }            
-        else if (moduleExists(moduleName) >= 0) 
         else if (moduleExists(moduleName) >= 0) 
         {  
             char exitRequest; // to detect user exit request.
@@ -618,6 +608,47 @@ void cmdsView(Student *students)
         printf("GPA: %.2f\n", students[pos].gpa);
         printf("Credits: %d\n", students[pos].credits);
     }
+}
+
+int reset()
+{
+    if (remove("modules.txt") == 0)
+    {
+        printf("Deleted modules.txt.\n");
+    }
+    else
+    {
+        printf("One or more files is unable to be removed. Aborting.\n");
+        return 1;
+    }
+    if (remove("students.txt") == 0)
+    {
+        printf("Deleted students.txt.\n");
+    }
+    else
+    {
+        printf("One or more files is unable to be removed. Aborting.\n");
+        return 1;
+    }
+    if (remove("numModules.txt") == 0)
+    {
+        printf("Deleted numModules.txt.\n");
+    }
+    else
+    {
+        printf("One or more files is unable to be removed. Aborting.\n");
+        return 1;
+    }
+    if (remove("numStudents.txt") == 0)
+    {
+        printf("Deleted numStudents.txt.\n");
+    }
+    else
+    {
+        printf("One or more files is unable to be removed. Aborting.\n");
+        return 1;
+    }
+    exit(EXIT_SUCCESS);
 }
 
 // END OF FILE
