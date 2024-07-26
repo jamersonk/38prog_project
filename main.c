@@ -47,10 +47,10 @@ int reset(); // deletes all previously stored files.
 
 // GLOBAL VARIABLES
 Module modules[MAX_MODULES] = {
-}; // DELETE ALL ELEMENTS BEFORE SUBMISSION
+};
 
 Student students[MAX_STUDENTS] = { 
-}; // DELETE ALL ELEMENTS BEFORE SUBMISSION
+};
 
 int studentsAllocated = 0; // SET TO 0.
 int modulesAllocated = 0; // SET TO 0.
@@ -124,7 +124,7 @@ int main()
     fclose(numStudents);
     fclose(numModules);
 
-    // begining actual program
+    // INPUT PROCESSING
     system("cls");
     while (strcmp(input, "quit") != 0) 
     {
@@ -169,6 +169,7 @@ int main()
             printf("Invalid command. Type \"cmds\" for a list of commands.\n");
         }
     }
+    // QUIT PROTOCOL
     numStudents = fopen("numStudents.txt", "wb");
     fwrite(&studentsAllocated, sizeof(int), 1, numStudents);
 
@@ -186,6 +187,8 @@ int main()
     fclose(numModules);
     fclose(modulesList);
     fclose(studentsList);
+
+    return EXIT_SUCCESS;
 } 
 // END MAIN
 
