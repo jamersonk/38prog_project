@@ -1,6 +1,4 @@
 # Student Record System
-This project was created for my project as part of a school assignment.
-
-Latest version: v1.1.1 released 25 July 2024.
+Project created for 38PROG Programming.
 
 Copyright © 2024 James Kuang Zhongchuan
